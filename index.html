@@ -4,15 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>موقع إيهاب | Ehab</title>
-  <meta name="description" content="أهلاً بيك في موقع إيهاب الشخصي، مساحة للتعلم والتكنولوجيا والإبداع.">
-  <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#071426">
-
-  <meta property="og:title" content="موقع إيهاب 💻">
-  <meta property="og:description" content="أهلاً بيك في عالمي الرقمي!">
-  <meta property="og:type" content="website">
+  <meta name="description" content="الموقع الشخصي لإيهاب، طالب بالصف الثالث الإعدادي ومهتم بالبرمجة والتكنولوجيا والأفكار الجديدة.">
+  <meta name="theme-color" content="#0b1120">
+  <meta property="og:title" content="إيهاب | موقعي الشخصي">
+  <meta property="og:description" content="أهلاً بيك في موقعي الشخصي!">
+  <title>إيهاب | موقعي الشخصي</title>
 
   <style>
     * {
@@ -21,227 +17,201 @@
       padding: 0;
     }
 
+    html { scroll-behavior: smooth; }
+
     body {
-      font-family: Arial, Tahoma, sans-serif;
-      background: #071426;
-      color: #f4f8ff;
+      font-family: Arial, sans-serif;
+      background: #0b1120;
+      color: #f1f5f9;
       line-height: 1.8;
     }
 
     header {
-      padding: 22px 7%;
+      padding: 22px 8%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid #203650;
-      background: #0b1c32;
+      border-bottom: 1px solid #263449;
     }
 
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #55d6ff;
-      font-size: 25px;
+      color: #22d3ee;
+      font-size: 27px;
       font-weight: bold;
     }
 
-    .logo-icon {
-      width: 45px;
-      height: 45px;
-      display: grid;
-      place-items: center;
-      background: #123c60;
-      border: 1px solid #55d6ff;
-      border-radius: 14px;
-      font-size: 25px;
+    nav a {
+      color: #e2e8f0;
+      text-decoration: none;
+      margin-right: 18px;
+    }
+
+    nav a:hover { color: #22d3ee; }
+
+    .hero {
+      min-height: 65vh;
+      padding: 85px 8%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      background: radial-gradient(ellipse at top left, #12304b, #0b1120 65%);
     }
 
     .tag {
-      color: #b5c8df;
-      font-size: 14px;
-    }
-
-    main {
-      width: min(100% - 36px, 1000px);
-      margin: auto;
-    }
-
-    .hero {
-      text-align: center;
-      padding: 90px 15px 70px;
-    }
-
-    .pill {
-      display: inline-block;
-      padding: 6px 16px;
-      border: 1px solid #24618b;
+      color: #22d3ee;
+      border: 1px solid #155e75;
       border-radius: 30px;
-      color: #71dcff;
-      background: #0d2943;
-      margin-bottom: 24px;
-    }
-
-    h1 {
-      font-size: clamp(36px, 7vw, 65px);
-      line-height: 1.4;
+      padding: 5px 15px;
       margin-bottom: 18px;
     }
 
-    h1 span {
-      color: #55d6ff;
+    h1 {
+      font-size: clamp(38px, 7vw, 65px);
+      line-height: 1.3;
+      margin-bottom: 15px;
     }
 
-    .intro {
-      max-width: 650px;
-      margin: 0 auto 30px;
-      color: #c0cee0;
-      font-size: 18px;
+    h1 span { color: #22d3ee; }
+
+    .hero p {
+      color: #cbd5e1;
+      max-width: 600px;
+      margin-bottom: 22px;
     }
 
-    .button {
-      display: inline-block;
-      text-decoration: none;
-      background: #55d6ff;
-      color: #071426;
+    .student {
+      color: #22d3ee !important;
       font-weight: bold;
-      padding: 12px 26px;
-      border-radius: 12px;
-      transition: 0.2s;
     }
 
-    .button:hover {
-      background: #a4ebff;
-      transform: translateY(-2px);
+    .btn {
+      display: inline-block;
+      background: #06b6d4;
+      color: #08111f;
+      padding: 11px 25px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
     }
+
+    section { padding: 65px 8%; }
 
     .section-title {
-      text-align: center;
       font-size: 30px;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
+
+    .section-title span { color: #22d3ee; }
 
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 18px;
-      padding-bottom: 65px;
+      gap: 20px;
     }
 
     .card {
-      background: #0d2038;
-      border: 1px solid #203c5c;
-      border-radius: 18px;
-      padding: 26px;
-      transition: 0.2s;
-    }
-
-    .card:hover {
-      border-color: #55d6ff;
-      transform: translateY(-4px);
-    }
-
-    .card-icon {
-      font-size: 35px;
-      margin-bottom: 12px;
+      background: #111c2e;
+      border: 1px solid #263449;
+      border-radius: 16px;
+      padding: 25px;
     }
 
     .card h3 {
-      color: #71dcff;
-      margin-bottom: 8px;
+      color: #22d3ee;
+      margin-bottom: 10px;
     }
 
-    .card p {
-      color: #c0cee0;
-    }
+    .card p, .about p { color: #cbd5e1; }
 
     .about {
-      text-align: center;
-      background: #0d2038;
-      border: 1px solid #203c5c;
-      border-radius: 20px;
-      padding: 35px 22px;
-      margin-bottom: 60px;
-    }
-
-    .about p {
-      max-width: 650px;
-      margin: 10px auto 0;
-      color: #c0cee0;
+      background: #0e1728;
     }
 
     footer {
       text-align: center;
-      padding: 25px 15px;
-      color: #a8bbd2;
-      border-top: 1px solid #203650;
+      padding: 25px;
+      border-top: 1px solid #263449;
+      color: #94a3b8;
     }
 
-    footer strong {
-      color: #55d6ff;
+    .whatsapp {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: #25d366;
+      color: white;
+      text-decoration: none;
+      padding: 13px 20px;
+      border-radius: 30px;
+      font-weight: bold;
+      box-shadow: 0 4px 15px #0005;
+      z-index: 9999;
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 18px 5%; }
+      nav a { margin-right: 8px; font-size: 14px; }
+      .hero { padding: 65px 6%; }
+      section { padding: 45px 6%; }
     }
   </style>
 </head>
 
 <body>
   <header>
-    <div class="logo">
-      <div class="logo-icon">💻</div>
-      <span>إيهاب</span>
-    </div>
-    <div class="tag">موقعي الشخصي ✨</div>
+    <div class="logo">💻 إيهاب</div>
+    <nav>
+      <a href="#home">الرئيسية</a>
+      <a href="#skills">اهتماماتي</a>
+      <a href="#about">عني</a>
+    </nav>
   </header>
 
   <main>
-    <section class="hero">
-      <div class="pill">أهلاً بيك في موقعي 🚀</div>
-
-      <h1>أهلاً بيك في<br><span>عالم إيهاب</span></h1>
-
-      <p class="intro">
-        دي مساحتي الخاصة على الإنترنت، بتعلم فيها حاجات جديدة
-        وببدأ رحلتي في عالم التكنولوجيا والبرمجة والإبداع.
-      </p>
-
-      <a class="button" href="#about">اكتشف موقعي</a>
+    <section class="hero" id="home">
+      <div class="tag">أهلاً بيك في موقعي 👋</div>
+      <h1>أنا <span>إيهاب</span></h1>
+      <p class="student">🎓 طالب بالصف الثالث الإعدادي</p>
+      <p>بحب أتعلم البرمجة والتكنولوجيا، وأطوّر من نفسي وأحوّل أفكاري لحاجات حقيقية على الإنترنت.</p>
+      <a class="btn" href="#about">اعرف عني أكتر</a>
     </section>
 
-    <section id="services">
-      <h2 class="section-title">إيه الموجود هنا؟</h2>
-
+    <section id="skills">
+      <h2 class="section-title">اهتماماتي <span>✨</span></h2>
       <div class="cards">
-        <article class="card">
-          <div class="card-icon">💻</div>
-          <h3>عالم البرمجة</h3>
-          <p>رحلتي في تعلم البرمجة وبناء مواقع جديدة وتطوير مهاراتي.</p>
-        </article>
-
-        <article class="card">
-          <div class="card-icon">🎮</div>
-          <h3>التكنولوجيا</h3>
-          <p>اهتمام بالتكنولوجيا والأفكار الرقمية وكل جديد في العالم التقني.</p>
-        </article>
-
-        <article class="card">
-          <div class="card-icon">🚀</div>
-          <h3>أفكار جديدة</h3>
-          <p>كل يوم فرصة نتعلم حاجة جديدة ونحوّل الأفكار لحاجات حقيقية.</p>
-        </article>
+        <div class="card">
+          <h3>💻 البرمجة</h3>
+          <p>بتعلم إزاي أصمم مواقع ويب وأطوّر مهاراتي خطوة بخطوة.</p>
+        </div>
+        <div class="card">
+          <h3>🚀 التكنولوجيا</h3>
+          <p>بحب أكتشف التقنيات الجديدة وأتعلم حاجات مفيدة.</p>
+        </div>
+        <div class="card">
+          <h3>💡 الأفكار</h3>
+          <p>بحب أجرّب أفكار جديدة وأحوّلها لمشروعات مميزة.</p>
+        </div>
       </div>
     </section>
 
     <section class="about" id="about">
-      <h2>مين إيهاب؟ 👋</h2>
-      <p>
-        أنا إيهاب، ودي بداية رحلتي في إنشاء المواقع.
-        الموقع ده بيتطور مع الوقت، وكل تعديل فيه خطوة جديدة للأمام!
-      </p>
+      <h2 class="section-title">مين هو <span>إيهاب؟</span></h2>
+      <p>أنا إيهاب، طالب بالصف الثالث الإعدادي، وببدأ رحلتي في عالم البرمجة وتطوير المواقع. هدفي إني أتعلم كل يوم حاجة جديدة وأطوّر من نفسي.</p>
     </section>
   </main>
 
   <footer>
-    <p>صُنع بكل حب بواسطة <strong>إيهاب 💙</strong></p>
-    <p>© <span id="year">2026</span> جميع الحقوق محفوظة</p>
+    <p>© 2026 إيهاب - جميع الحقوق محفوظة</p>
+    <p>اتعمل بحماس ❤️ وشغف بالتكنولوجيا</p>
   </footer>
+
+  <a class="whatsapp"
+     href="https://wa.me/201117194084"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="تواصل مع إيهاب عبر واتساب">
+    💬 تواصل مع إيهاب
+  </a>
 </body>
 </html>
