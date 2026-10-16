@@ -1,492 +1,59 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="theme-color" content="#100d25">
+<meta name="theme-color" content="#0b1020">
 <title>Ehab Interactive</title>
 <style>
-:root{--bg:#100d25;--panel:#1c1739;--panel2:#27204a;--text:#f8f7ff;--muted:#c4bedf;--accent:#a78bfa;--accent2:#67e8f9;--gold:#facc15}
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,Tahoma,sans-serif;color:var(--text);background:radial-gradient(ellipse at top,#30215c,var(--bg) 65%);min-height:100vh;line-height:1.7}
-body.theme-ocean{--bg:#061e32;--panel:#0b3049;--panel2:#124361;--accent:#38bdf8;--accent2:#67e8f9}
-body.theme-forest{--bg:#09251b;--panel:#10382a;--panel2:#18513a;--accent:#4ade80;--accent2:#bbf7d0}
-body.theme-sunset{--bg:#301321;--panel:#4a1d35;--panel2:#662a46;--accent:#fb7185;--accent2:#fbbf24}
-body.theme-space{--bg:#08091e;--panel:#171b3c;--panel2:#222957;--accent:#818cf8;--accent2:#22d3ee}
-body.theme-gold{--bg:#241a06;--panel:#3b2a0b;--panel2:#574014;--accent:#facc15;--accent2:#fde68a}
-header{text-align:center;padding:24px 12px 12px}
-header h1{font-size:clamp(26px,5vw,42px);margin:0}
-header h1 span{color:var(--accent2)}
-header p{color:var(--muted);margin:6px}
-main{max-width:1050px;margin:auto;padding:12px}
-.panel{background:linear-gradient(145deg,var(--panel),var(--bg));border:1px solid #66558a88;border-radius:20px;padding:16px;margin:14px 0;box-shadow:0 8px 25px #0002}
-h2{font-size:21px;margin:0 0 10px}
-h3{font-size:17px;margin:10px 0}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-.stat{background:var(--panel2);padding:12px;border-radius:14px}
-.big{font-size:26px;font-weight:bold;color:var(--accent2)}
-.muted{color:var(--muted);font-size:14px}
-button,input,textarea{font:inherit}
-button{background:linear-gradient(135deg,var(--accent),#6366f1);color:white;border:0;border-radius:12px;padding:10px 14px;cursor:pointer;margin:4px 2px;font-weight:bold;touch-action:manipulation}
-button:disabled{opacity:.45;cursor:not-allowed}
-input,textarea{background:var(--bg);color:var(--text);border:1px solid #756795;border-radius:10px;padding:11px;width:100%;margin:5px 0 10px}
-textarea{min-height:100px}
-.progress{height:12px;background:#090719;border-radius:99px;overflow:hidden}
-.progress div{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0}
-.result{min-height:25px;color:var(--accent2);font-weight:bold}
-.badges,.shop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px}
-.badge,.shop-item{border:1px solid #66558a88;border-radius:14px;padding:11px;text-align:center;background:var(--panel2)}
-.badge{opacity:.5}.badge.unlocked{opacity:1;border-color:var(--gold)}
-.emoji{display:block;font-size:28px}
-.preview{height:45px;border-radius:8px;margin-bottom:7px}
-.price{color:var(--gold);font-weight:bold}
-.equipped{color:#86efac}
-.tag{display:inline-block;background:var(--panel2);border-radius:30px;padding:2px 10px}
-hr{border:0;border-top:1px solid #66558a66;margin:16px 0}
-footer{text-align:center;color:var(--muted);padding:20px}
-.wheel-area{display:flex;flex-direction:column;align-items:center;gap:10px}
-.wheel-wrap{position:relative;width:min(78vw,300px);aspect-ratio:1}
-.wheel{width:100%;height:100%;border:7px solid #facc15;border-radius:50%;background:conic-gradient(#7c3aed 0deg 60deg,#0891b2 60deg 120deg,#db2777 120deg 180deg,#16a34a 180deg 240deg,#ea580c 240deg 300deg,#4f46e5 300deg 360deg);position:relative;transition:transform 4s cubic-bezier(.12,.72,.12,1)}
-.wheel-label{position:absolute;left:50%;top:50%;width:42%;text-align:center;font-weight:bold;font-size:15px;transform-origin:0 0;text-shadow:0 2px 4px #000}
-.wheel-label span{display:block;transform:translate(-50%,-50%)}
-.pointer{position:absolute;z-index:3;top:-4px;left:50%;transform:translateX(-50%);border-left:16px solid transparent;border-right:16px solid transparent;border-top:32px solid #facc15}
-.wheel-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;border-radius:50%;width:54px;height:54px;background:#fff7d6;color:#31204f;border:5px solid #facc15;display:grid;place-items:center;font-size:24px}
-
-/* لعبة السباق */
-.race-shell{max-width:520px;margin:auto}
-.race-hud{display:flex;justify-content:space-between;gap:8px;margin:8px 0}
-.hud-box{flex:1;background:var(--panel2);padding:7px;border-radius:10px;text-align:center;font-size:14px}
-#raceCanvas{display:block;width:100%;height:auto;aspect-ratio:3/4;border-radius:15px;border:2px solid #8b7bb6;background:#1b1b27;touch-action:none}
-.race-controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:9px;direction:ltr}
-.race-controls button{font-size:24px;padding:12px 5px;margin:0;user-select:none;-webkit-user-select:none;touch-action:none}
-.race-start{width:100%;font-size:17px}
-.note{font-size:13px;color:var(--muted)}
+:root{--bg:#080d1b;--panel:#121a2d;--panel2:#18233b;--line:#2a3856;--text:#f4f7ff;--muted:#aebbd3;--blue:#55b6ff;--green:#5ee0a0;--gold:#ffd166;--pink:#ff7ab6}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#172544 0,#080d1b 52%);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;min-height:100vh}button,input,textarea{font:inherit}button{border:0;cursor:pointer;color:#06101c;background:linear-gradient(135deg,#75d0ff,#62a8ff);font-weight:800;padding:11px 14px;border-radius:13px;touch-action:manipulation}button:disabled{opacity:.45;cursor:not-allowed}.secondary{background:#263653;color:#edf5ff;border:1px solid #3a4b6b}.gold{background:linear-gradient(135deg,#ffe69a,#ffbd47)}.green{background:linear-gradient(135deg,#80f0bd,#35c98b)}.danger{background:#4a2637;color:#ffeaf0}.wrap{max-width:1050px;margin:auto;padding:16px}.hero{padding:20px;border:1px solid #334565;border-radius:24px;background:linear-gradient(135deg,#172a4b,#11182a 70%);box-shadow:0 15px 45px #0004}.brand{display:flex;align-items:center;gap:12px}.logo{width:54px;height:54px;border-radius:17px;display:grid;place-items:center;font-size:28px;background:linear-gradient(135deg,#70dcff,#a18aff);color:#08101f}.eyebrow{color:#8cdcff;font-size:12px;font-weight:800;letter-spacing:1px}.hero h1{margin:2px 0;font-size:clamp(25px,5vw,38px)}.hero p{color:var(--muted);margin:8px 0 0}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:16px}.stat{background:#0b1426;border:1px solid #2b3a58;border-radius:15px;padding:12px}.stat small{color:var(--muted);display:block}.stat strong{font-size:20px}.nav{display:flex;gap:8px;overflow:auto;padding:13px 0 5px;scrollbar-width:thin}.nav button{white-space:nowrap;background:#1a2740;color:#dbeaff;border:1px solid #344765}.nav button.active{background:#73ccff;color:#07101d}.section{display:none;margin-top:12px}.section.active{display:block}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card{background:linear-gradient(160deg,#151f35,#0f1729);border:1px solid var(--line);border-radius:19px;padding:16px;min-width:0}.card h2,.card h3{margin:0 0 10px}.card p{color:var(--muted);line-height:1.7}.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.pill{font-size:12px;background:#263753;color:#cbe7ff;padding:5px 9px;border-radius:999px}.muted{color:var(--muted)}.field{width:100%;background:#091224;color:#fff;border:1px solid #334462;border-radius:12px;padding:11px;margin:5px 0 10px}.answer{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.answer button{background:#263653;color:white}.answer button.correct{background:#1e704f}.answer button.wrong{background:#813b4e}.progress{height:8px;background:#283651;border-radius:99px;overflow:hidden}.progress span{display:block;height:100%;background:linear-gradient(90deg,#4bbdff,#6ce5a8);width:0%}.item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #293752}.item:last-child{border-bottom:0}.carIcon{font-size:30px}.small{font-size:13px}.wheel{width:min(280px,75vw);aspect-ratio:1;border-radius:50%;margin:14px auto;background:conic-gradient(#ffcf67 0 45deg,#8ae3bf 45deg 90deg,#75c9ff 90deg 135deg,#b4a0ff 135deg 180deg,#ff8fbb 180deg 225deg,#ffcf67 225deg 270deg,#8ae3bf 270deg 315deg,#75c9ff 315deg);border:7px solid #e9f5ff;box-shadow:0 0 0 5px #314260;display:grid;place-items:center;transition:transform 3.2s cubic-bezier(.12,.72,.15,1);position:relative}.wheel:after{content:"🎁";font-size:38px;background:#101a2e;border:4px solid white;width:72px;height:72px;border-radius:50%;display:grid;place-items:center}.pointer{font-size:28px;text-align:center;margin-bottom:-20px}.gameCanvas{width:100%;height:58vh;min-height:350px;max-height:610px;display:block;background:#88c9e9;border-radius:17px;border:1px solid #3b5478;touch-action:none}.gameControls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-top:10px}.gameControls button{padding:15px 7px;font-size:17px;user-select:none}.garageGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.carCard{border:1px solid #344765;border-radius:15px;background:#0c1528;padding:13px}.carVisual{height:82px;border-radius:12px;background:linear-gradient(135deg,#223b60,#111b30);display:grid;place-items:center;font-size:43px;margin-bottom:9px}.mission{background:#0b1426;border:1px solid #2b3a58;border-radius:13px;padding:12px;margin:8px 0}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:20;background:#e8f7ff;color:#07111f;padding:12px 18px;border-radius:14px;font-weight:800;box-shadow:0 8px 30px #0007;display:none;max-width:90%;text-align:center}.footer{text-align:center;color:#7f90ac;font-size:12px;padding:22px}
+@media(max-width:650px){.wrap{padding:10px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.grid{grid-template-columns:1fr}.hero{padding:15px}.gameCanvas{height:52vh;min-height:320px}.garageGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.card{padding:13px}}
 </style>
 </head>
 <body>
-<header>
-<h1>🚀 موقع <span>Ehab Interactive</span></h1>
-<p>العب واجمع النقاط وافتح الجوائز!</p>
-<p><span class="tag" id="equippedTitle">🌱 مبتدئ</span></p>
+<div class="wrap">
+<header class="hero">
+ <div class="brand"><div class="logo">⚡</div><div><div class="eyebrow">YOUR FUN • YOUR PROGRESS</div><h1>Ehab Interactive</h1><div class="muted">اتعلّم، العب، اجمع نقاط، وافتح عالمك الخاص 🚀</div></div></div>
+ <div class="row" style="margin-top:16px"><div style="flex:1;min-width:180px"><label class="small muted" for="playerName">اسم اللاعب</label><input id="playerName" class="field" style="margin-bottom:0" maxlength="22" placeholder="اكتب اسمك"></div><button onclick="saveName()">حفظ الاسم</button></div>
+ <div class="stats"><div class="stat"><small>🪙 النقاط</small><strong id="points">0</strong></div><div class="stat"><small>🏆 المستوى</small><strong id="level">1</strong></div><div class="stat"><small>🎖️ الإنجازات</small><strong id="achievements">0</strong></div><div class="stat"><small>🚗 أفضل رحلة</small><strong id="bestTrip">0</strong></div></div>
 </header>
-
+<nav class="nav" id="nav">
+ <button class="active" data-tab="home">الرئيسية</button><button data-tab="city">🏙️ المدينة 3D</button><button data-tab="race">🏁 Ehab Racer</button><button data-tab="garage">🚘 الجراج</button><button data-tab="missions">🎯 المهمات</button><button data-tab="quiz">🧠 اختبار</button><button data-tab="tap">⚡ سرعة</button><button data-tab="math">➗ حساب</button><button data-tab="shop">🛍️ المتجر</button><button data-tab="wheel">🎡 عجلة الحظ</button><button data-tab="tools">📝 أدوات</button><button data-tab="achieve">🏆 إنجازاتي</button>
+</nav>
 <main>
-<section class="panel">
-<h2>👤 ملف اللاعب</h2>
-<label for="playerName">اسم اللاعب</label>
-<input id="playerName" maxlength="24" placeholder="اكتب اسمك">
-<button onclick="saveName()">حفظ الاسم</button>
-<p id="welcome" class="muted">أهلاً بيك في عالم التحديات!</p>
-<div class="grid">
-<div class="stat">النقاط 🪙<div class="big" id="points">0</div></div>
-<div class="stat">المستوى<div class="big" id="level">1</div><span id="rank">🌱 مبتدئ</span></div>
-<div class="stat">أفضل ضغطات<div class="big" id="best">0</div></div>
-<div class="stat">أفضل سباق 🏎️<div class="big" id="raceBest">0</div></div>
-</div>
-<h3 id="nextLevel">التقدم للمستوى التالي</h3>
-<div class="progress"><div id="xpBar"></div></div>
-<p class="muted" id="xpText"></p>
-<p>لقبك: <span id="playerTitle">🌱 مبتدئ</span></p>
+<section class="section active" id="home">
+ <div class="grid">
+  <article class="card"><h2>👋 أهلاً بيك!</h2><p>اجمع النقاط من الاختبارات والسباقات والمهمات، وافتح عربيات جديدة. تقدمك بيتحفظ على نفس المتصفح.</p><div class="progress"><span id="levelProgress"></span></div><p class="small" id="levelText">ابدأ اللعب عشان تجمع نقاط!</p><button onclick="showTab('city')" class="green">انطلق إلى المدينة 🚗</button></article>
+  <article class="card"><h2>💡 فكرة اليوم</h2><p id="dailyIdea">كل خطوة صغيرة بتقرّبك من هدفك.</p><button class="secondary" onclick="newIdea()">فكرة تانية</button></article>
+  <article class="card"><h2>🎮 تحديات سريعة</h2><p>اختبر معلوماتك، جرّب سرعة ضغطاتك، أو حل مسألة حسابية.</p><div class="row"><button onclick="showTab('quiz')">اختبار</button><button onclick="showTab('tap')" class="secondary">تحدي الضغطات</button></div></article>
+  <article class="card"><h2>🚗 رحلتك</h2><p id="tripSummary">لسه ما بدأتش رحلة في المدينة.</p><button onclick="showTab('missions')" class="gold">شوف المهمات</button></article>
+ </div>
 </section>
-
-<section class="panel" id="dailyWheel">
-<h2>🎡 عجلة الجوائز اليومية</h2>
-<p class="muted">لفة مجانية واحدة كل يوم، ومكافآت عشوائية.</p>
-<div class="wheel-area">
-<div class="wheel-wrap">
-<div class="pointer"></div>
-<div class="wheel" id="wheel">
-<div class="wheel-label" style="transform:rotate(30deg) translateY(-95px)"><span>10</span></div>
-<div class="wheel-label" style="transform:rotate(90deg) translateY(-95px)"><span>20</span></div>
-<div class="wheel-label" style="transform:rotate(150deg) translateY(-95px)"><span>30</span></div>
-<div class="wheel-label" style="transform:rotate(210deg) translateY(-95px)"><span>50</span></div>
-<div class="wheel-label" style="transform:rotate(270deg) translateY(-95px)"><span>75</span></div>
-<div class="wheel-label" style="transform:rotate(330deg) translateY(-95px)"><span>100</span></div>
-</div>
-<div class="wheel-center">🎁</div>
-</div>
-<button id="spinButton" onclick="spinWheel()">لف العجلة 🎡</button>
-<p class="result" id="wheelResult" aria-live="polite">حظ سعيد! 🍀</p>
-<p class="muted" id="wheelStatus"></p>
-</div>
+<section class="section" id="city">
+ <article class="card">
+  <div class="row"><div><h2>🏙️ Ehab City 3D</h2><p style="margin:0">كاميرا خلف العربية • تحكم باللمس • اجمع العملات ولف في المدينة.</p></div><span class="pill" id="cityStatus">جاهز للانطلاق</span></div>
+  <div id="threeNotice" class="mission" style="display:none">تحميل محرك الرسوم الثلاثية الأبعاد لم ينجح. اتصل بالإنترنت وحدّث الصفحة، أو جرّب متصفح Chrome.</div>
+  <div id="gameHost" style="position:relative;margin-top:12px"><canvas id="gameCanvas" class="gameCanvas"></canvas><div id="loading3d" style="position:absolute;inset:0;display:grid;place-items:center;background:#14253b;border-radius:17px">جارٍ تجهيز المدينة… 🏙️</div></div>
+  <div class="gameControls"><button id="leftBtn" class="secondary">⬅️ شمال</button><button id="brakeBtn" class="gold">🐢 فرامل</button><button id="rightBtn" class="secondary">يمين ➡️</button></div>
+  <div class="gameControls" style="grid-template-columns:1fr 1fr"><button id="gasBtn" class="green">🚀 تسارع</button><button id="startDriveBtn">▶️ ابدأ / أعد الرحلة</button></div>
+  <div class="row" style="margin-top:12px"><span class="pill">🪙 العملات: <b id="cityCoins">0</b></span><span class="pill">📍 المسافة: <b id="cityDistance">0</b> م</span><span class="pill">⚡ السرعة: <b id="citySpeed">0</b></span></div>
+  <p class="small">تلميح: اسحب يمين/شمال أو استخدم الأزرار. امسك زر التسارع لزيادة السرعة، واجمع العملات المتوهجة.</p>
+ </article>
 </section>
-
-<section class="panel" id="racingGame">
-<h2>🏎️ Ehab Racer — سباق السيارات</h2>
-<p class="muted">اتحرك يمين وشمال، وتفادى العربيات والعوائق. كل ما تصمد أكثر، نتيجتك تزيد!</p>
-<div class="race-shell">
-<div class="race-hud">
-<div class="hud-box">النتيجة<br><b id="raceScore">0</b></div>
-<div class="hud-box">أفضل نتيجة<br><b id="raceBestHud">0</b></div>
-<div class="hud-box">السرعة<br><b id="raceSpeed">1</b></div>
-</div>
-<canvas id="raceCanvas" width="360" height="480" aria-label="لعبة سباق السيارات"></canvas>
-<div class="race-controls">
-<button id="leftBtn" aria-label="يسار">⬅️</button>
-<button id="brakeBtn" aria-label="إبطاء">🐢</button>
-<button id="rightBtn" aria-label="يمين">➡️</button>
-</div>
-<button class="race-start" id="raceStart" onclick="startRace()">🚦 ابدأ السباق</button>
-<p class="result" id="raceMessage" aria-live="polite">استعد للسباق!</p>
-<p class="note">على التابلت: استخدم أزرار اليمين واليسار. على الكمبيوتر: الأسهم أو A وD.</p>
-</div>
-</section>
-
-<section class="panel">
-<h2>🛒 متجر الجوائز</h2>
-<p class="muted">اشترِ الألقاب والألوان والخلفيات بالنقاط.</p>
-<h3>🏅 الألقاب</h3><div class="shop-grid" id="titleShop"></div>
-<hr><h3>🎨 الألوان</h3><div class="shop-grid" id="colorShop"></div>
-<hr><h3>🌌 الخلفيات</h3><div class="shop-grid" id="backgroundShop"></div>
-<p class="result" id="shopMessage"></p>
-</section>
-
-<section class="panel">
-<h2>🎖️ الإنجازات</h2>
-<div class="badges" id="badges"></div>
-</section>
-
-<section class="panel">
-<h2>🧠 اختبار المعلومات</h2>
-<p id="question">اضغط ابدأ لعرض أول سؤال.</p>
-<div id="answers"></div>
-<p class="result" id="quizResult"></p>
-<button id="quizStart" onclick="startQuiz()">ابدأ الاختبار</button>
-<button id="quizNext" onclick="nextQuestion()" hidden>السؤال التالي</button>
-</section>
-
-<section class="panel">
-<h2>⚡ تحدي الضغطات</h2>
-<p>اضغط أكبر عدد ممكن خلال 10 ثوانٍ.</p>
-<div class="grid">
-<div class="stat">الوقت<div class="big" id="timeLeft">10</div></div>
-<div class="stat">الضغطات<div class="big" id="tapCount">0</div></div>
-</div>
-<button id="tapButton" onclick="tap()" disabled>اضغط بسرعة! 👆</button>
-<button id="tapStart" onclick="startTap()">ابدأ التحدي</button>
-<p class="result" id="tapResult"></p>
-</section>
-
-<section class="panel">
-<h2>➗ تحدي الحساب</h2>
-<p id="mathQuestion">اضغط سؤال جديد عشان تبدأ.</p>
-<input id="mathAnswer" type="number" inputmode="decimal" placeholder="اكتب الإجابة">
-<button onclick="checkMath()">تحقق</button><button onclick="newMath()">سؤال جديد</button>
-<p class="result" id="mathResult"></p>
-</section>
-
-<section class="panel">
-<h2>📝 دفتر الملاحظات</h2>
-<textarea id="notes" placeholder="اكتب ملاحظاتك هنا..."></textarea>
-<button onclick="saveNotes()">حفظ الملاحظات</button>
-<button onclick="clearNotes()">مسح الملاحظات</button>
-<p class="result" id="notesResult"></p>
-</section>
-
-<section class="panel">
-<h2>🧮 الآلة الحاسبة</h2>
-<input id="calcInput" inputmode="decimal" placeholder="مثال: (12+8)*3">
-<button onclick="calculate()">احسب</button>
-<p class="result" id="calcResult"></p>
-</section>
-
-<section class="panel">
-<h2>💡 فكرة اليوم</h2>
-<p id="dailyIdea">كل خطوة صغيرة بتقربك من هدفك!</p>
-<button onclick="showIdea()">فكرة أخرى</button>
-</section>
-
-<section class="panel">
-<h2>⚙️ إعدادات</h2>
-<p class="muted">إعادة الضبط تمسح النقاط والمشتريات والتقدم المحفوظ.</p>
-<button onclick="resetProgress()">إعادة ضبط التقدم</button>
-</section>
+<section class="section" id="race"><article class="card"><div class="row"><div><h2>🏁 Ehab Racer</h2><p style="margin:0">السباق السريع القديم — تفادى العربيات واجمع أكبر نتيجة.</p></div><span class="pill">أفضل نتيجة: <b id="raceBestLabel">0</b></span></div><canvas id="raceCanvas" class="gameCanvas" style="margin-top:12px;background:#19263a"></canvas><div class="gameControls"><button id="raceLeft" class="secondary">⬅️ شمال</button><button id="raceBrake" class="gold">🐢 إبطاء</button><button id="raceRight" class="secondary">يمين ➡️</button></div><div class="row" style="margin-top:10px"><span class="pill">النتيجة: <b id="raceScore">0</b></span><button id="raceStart" onclick="startRaceGame()">ابدأ السباق 🚦</button></div></article></section>
+<section class="section" id="garage"><article class="card"><div class="row"><div><h2>🚘 جراج العربيات</h2><p style="margin:0">اشتري بالنقاط واختر عربيتك للقيادة.</p></div><span class="pill">رصيدك: <b id="garagePoints">0</b> نقطة</span></div><div class="garageGrid" id="garageGrid" style="margin-top:14px"></div></article></section>
+<section class="section" id="missions"><article class="card"><h2>🎯 مهمات المدينة</h2><p>كل مهمة مكتملة بتديك نقاطًا إضافية. المهمات تتحدث حسب تقدمك.</p><div id="missionList"></div></article></section>
+<section class="section" id="quiz"><article class="card"><div class="row"><h2>🧠 اختبار المعلومات</h2><span class="pill" id="quizCount">0 / 5</span></div><p id="question">اضغط ابدأ لبدء الاختبار.</p><div class="answer" id="answers"></div><div class="row" style="margin-top:12px"><span class="muted small" id="quizFeedback"></span><button id="quizNext" onclick="nextQuestion()">ابدأ الاختبار</button></div></article></section>
+<section class="section" id="tap"><article class="card"><h2>⚡ تحدي سرعة الضغطات</h2><p>اضغط الزر أكبر عدد ممكن خلال 10 ثوانٍ.</p><div class="row"><span class="pill">الوقت: <b id="tapTime">10</b> ث</span><span class="pill">الضغطات: <b id="tapCount">0</b></span><span class="pill">أفضل نتيجة: <b id="tapBest">0</b></span></div><button id="tapButton" class="green" style="width:100%;padding:24px;font-size:23px;margin-top:15px" onclick="tapHit()">اضغط هنا! 👆</button><button class="secondary" style="margin-top:10px" onclick="startTap()">ابدأ تحدي جديد</button></article></section>
+<section class="section" id="math"><article class="card"><h2>➗ تحدي الحساب</h2><p>حل المسألة واكسب نقاطًا.</p><div class="mission" style="font-size:25px;text-align:center" id="mathQuestion">اضغط سؤال جديد</div><div class="row"><input id="mathAnswer" class="field" style="flex:1;min-width:130px;margin:0" inputmode="numeric" placeholder="اكتب الإجابة"><button onclick="checkMath()">تحقق</button></div><p id="mathFeedback"></p><button class="secondary" onclick="newMath()">سؤال جديد</button></article></section>
+<section class="section" id="shop"><article class="card"><h2>🛍️ متجر الجوائز</h2><p>اصرف نقاطك على ألقاب وألوان وخلفيات. العناصر اللي اشتريتها تفضل ملكك.</p><div id="shopItems"></div></article></section>
+<section class="section" id="wheel"><article class="card" style="text-align:center"><h2>🎡 عجلة الحظ اليومية</h2><p>لفة واحدة كل يوم. جرّب حظك واربح نقاطًا.</p><div class="pointer">▼</div><div class="wheel" id="wheel"></div><p id="wheelResult">جاهز؟ لف العجلة!</p><button class="gold" id="spinButton" onclick="spinWheel()">لف العجلة 🎁</button></article></section>
+<section class="section" id="tools"><div class="grid"><article class="card"><h2>📝 دفتر الملاحظات</h2><p>ملاحظاتك محفوظة على جهازك.</p><textarea id="notes" class="field" rows="7" placeholder="اكتب أفكارك هنا..."></textarea><button onclick="saveNotes()">حفظ الملاحظات</button><span id="notesStatus" class="small muted"></span></article><article class="card"><h2>🧮 آلة حاسبة</h2><input id="calcInput" class="field" inputmode="decimal" placeholder="مثال: (12+8)*3"><button onclick="calculate()">احسب</button><div class="mission" id="calcResult">النتيجة هتظهر هنا.</div><p class="small">تقبل الأرقام والعمليات الحسابية والأقواس فقط.</p></article></div></section>
+<section class="section" id="achieve"><article class="card"><h2>🏆 الإنجازات</h2><p>كل ما تتقدم في الموقع هتفتح إنجازات جديدة.</p><div id="achievementList"></div></article></section>
 </main>
-<footer>صُنع بحماس 💜 — Ehab Interactive</footer>
-
+<div class="footer">صُنع بحماس ✨ Ehab Interactive • نسخة قابلة للتطوير</div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script>
-const STORE="ehabInteractiveShopV3";
-const defaults={name:"",points:0,best:0,quizCorrect:0,quizRuns:0,mathCorrect:0,tapRuns:0,totalTaps:0,notes:"",owned:[],title:"starter",color:"purple",background:"default",wheelDate:"",raceBest:0,raceRuns:0,raceTotal:0};
-let state={...defaults};
-try{state={...defaults,...JSON.parse(localStorage.getItem(STORE)||"{}")};}catch(e){}
-if(!Array.isArray(state.owned))state.owned=[];
-function persist(){try{localStorage.setItem(STORE,JSON.stringify(state));}catch(e){console.warn("Save failed",e);}}
-function dateKey(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
-function levelFor(p){return Math.floor(Math.sqrt(Math.max(0,p)/100))+1;}
-function levelStart(l){return (l-1)*(l-1)*100;}
-function rankFor(l){return l>=10?"👑 أسطورة":l>=7?"💎 محترف":l>=4?"🔥 متقدم":l>=2?"⭐ مغامر":"🌱 مبتدئ";}
-const items=[
-{id:"starter",type:"title",name:"مبتدئ",icon:"🌱",price:0,desc:"لقب البداية"},
-{id:"explorer",type:"title",name:"المغامر",icon:"🧭",price:80,desc:"لقب المستكشف"},
-{id:"pro",type:"title",name:"المحترف",icon:"🔥",price:180,desc:"لقب قوي"},
-{id:"champion",type:"title",name:"البطل",icon:"🏆",price:350,desc:"لقب الأبطال"},
-{id:"legend",type:"title",name:"الأسطورة",icon:"👑",price:600,desc:"لقب نادر"},
-{id:"purple",type:"color",name:"بنفسجي",icon:"💜",price:0,value:"#a78bfa",desc:"اللون الأصلي"},
-{id:"blue",type:"color",name:"أزرق",icon:"💙",price:60,value:"#38bdf8",desc:"لون المحيط"},
-{id:"green",type:"color",name:"أخضر",icon:"💚",price:90,value:"#4ade80",desc:"لون الطبيعة"},
-{id:"gold",type:"color",name:"ذهبي",icon:"💛",price:140,value:"#facc15",desc:"لون الملوك"},
-{id:"default",type:"background",name:"الفضاء البنفسجي",icon:"🌌",price:0,desc:"الخلفية الأصلية",className:""},
-{id:"ocean",type:"background",name:"المحيط",icon:"🌊",price:100,desc:"ألوان البحر",className:"theme-ocean"},
-{id:"forest",type:"background",name:"الغابة",icon:"🌳",price:130,desc:"ألوان الطبيعة",className:"theme-forest"},
-{id:"sunset",type:"background",name:"الغروب",icon:"🌇",price:160,desc:"ألوان دافئة",className:"theme-sunset"},
-{id:"space",type:"background",name:"الفضاء العميق",icon:"🚀",price:220,desc:"أجواء مستقبلية",className:"theme-space"},
-{id:"goldbg",type:"background",name:"القاعة الذهبية",icon:"✨",price:300,desc:"خلفية مميزة",className:"theme-gold"}
-];
-function getItem(id){return items.find(i=>i.id===id);}
-function owns(id){return state.owned.includes(id)||getItem(id)?.price===0;}
-function getTitle(){const i=getItem(state.title);return i?i.icon+" "+i.name:"🌱 مبتدئ";}
-function applyAppearance(){
- document.documentElement.style.setProperty("--accent",getItem(state.color)?.value||"#a78bfa");
- document.body.classList.remove("theme-ocean","theme-forest","theme-sunset","theme-space","theme-gold");
- const bg=getItem(state.background);if(bg?.className)document.body.classList.add(bg.className);
-}
-const achievements=[
-{icon:"🎉",name:"أول خطوة",desc:"اجمع 10 نقاط",ok:()=>state.points>=10},
-{icon:"💯",name:"جامع النقاط",desc:"اجمع 100 نقطة",ok:()=>state.points>=100},
-{icon:"🧠",name:"عقل ذهبي",desc:"5 إجابات صحيحة",ok:()=>state.quizCorrect>=5},
-{icon:"➗",name:"بطل الحساب",desc:"حل 5 مسائل",ok:()=>state.mathCorrect>=5},
-{icon:"⚡",name:"سريع جدًا",desc:"20 ضغطة في جولة",ok:()=>state.best>=20},
-{icon:"🎮",name:"لاعب نشيط",desc:"3 جولات ضغطات",ok:()=>state.tapRuns>=3},
-{icon:"🏆",name:"المستوى الخامس",desc:"وصل للمستوى 5",ok:()=>levelFor(state.points)>=5},
-{icon:"🛍️",name:"أول شراء",desc:"اشترِ جائزة",ok:()=>state.owned.some(id=>(getItem(id)?.price||0)>0)},
-{icon:"🏎️",name:"سائق مبتدئ",desc:"أكمل أول سباق",ok:()=>state.raceRuns>=1},
-{icon:"🚗",name:"سائق محترف",desc:"اجمع 500 نقطة في سباق",ok:()=>state.raceBest>=500}
-];
-function render(){
- document.getElementById("playerName").value=state.name||"";
- document.getElementById("welcome").textContent=state.name?"أهلاً يا "+state.name+"، استمتع بالتحديات! 🎮":"أهلاً بيك في عالم التحديات!";
- document.getElementById("points").textContent=state.points;
- document.getElementById("level").textContent=levelFor(state.points);
- document.getElementById("rank").textContent=rankFor(levelFor(state.points));
- document.getElementById("playerTitle").textContent=getTitle();
- document.getElementById("equippedTitle").textContent=getTitle();
- document.getElementById("best").textContent=state.best;
- document.getElementById("raceBest").textContent=state.raceBest||0;
- document.getElementById("raceBestHud").textContent=state.raceBest||0;
- const l=levelFor(state.points),start=levelStart(l),end=levelStart(l+1);
- document.getElementById("nextLevel").textContent="المستوى "+l+" ← المستوى "+(l+1);
- document.getElementById("xpBar").style.width=Math.min(100,(state.points-start)/(end-start)*100)+"%";
- document.getElementById("xpText").textContent=(state.points-start)+" من "+(end-start)+" نقطة للمستوى التالي";
- document.getElementById("badges").innerHTML=achievements.map(a=>'<div class="badge '+(a.ok()?"unlocked":"")+'"><span class="emoji">'+a.icon+'</span><b>'+a.name+'</b><br><small>'+a.desc+'</small><div>'+(a.ok()?"✅ مفتوح":"🔒 مقفول")+'</div></div>').join("");
- applyAppearance();renderShop();renderWheel();
-}
-function addPoints(amount){
- const old=levelFor(state.points);state.points=Math.max(0,state.points+amount);persist();render();
- const l=levelFor(state.points);if(l>old)document.getElementById("raceMessage").textContent="🎉 مبروك! وصلت للمستوى "+l+"!";
-}
-function saveName(){state.name=document.getElementById("playerName").value.trim().slice(0,24);persist();render();}
-function renderShop(){
- for(const [container,type] of [["titleShop","title"],["colorShop","color"],["backgroundShop","background"]]){
-  document.getElementById(container).innerHTML=items.filter(i=>i.type===type).map(i=>{
-   const owned=owns(i.id),active=type==="title"?state.title===i.id:type==="color"?state.color===i.id:state.background===i.id;
-   const preview=type==="color"?"background:"+i.value:type==="background"?"background:linear-gradient(135deg,#30215c,#a78bfa)":"background:linear-gradient(135deg,#312e81,#7c3aed)";
-   return '<div class="shop-item"><div class="preview" style="'+preview+'"></div><div style="font-size:25px">'+i.icon+'</div><b>'+i.name+'</b><p class="muted">'+i.desc+'</p><p class="price">'+(i.price===0?"مجاني":i.price+" نقطة")+'</p><button '+(active?"disabled":"")+' onclick="shopAction(\''+i.id+'\')">'+(active?"✅ مجهز":owned?"تجهيز":"شراء")+'</button></div>';
-  }).join("");
- }
-}
-function shopAction(id){
- const i=getItem(id);if(!i)return;
- if(!owns(id)){
-  if(state.points<i.price){document.getElementById("shopMessage").textContent="نقاطك غير كافية. محتاج "+(i.price-state.points)+" نقطة إضافية.";return;}
-  state.points-=i.price;state.owned.push(id);
- }
- if(i.type==="title")state.title=id;if(i.type==="color")state.color=id;if(i.type==="background")state.background=id;
- persist();render();document.getElementById("shopMessage").textContent="تم تجهيز "+i.name+" بنجاح! ✨";
-}
-const prizes=[10,20,30,50,75,100];let wheelRotation=0,wheelBusy=false;
-function renderWheel(){
- const used=state.wheelDate===dateKey();
- document.getElementById("spinButton").disabled=used||wheelBusy;
- document.getElementById("wheelStatus").textContent=used?"أخدت مكافأة اليوم؛ ارجع بكرة 🎁":"لفة مجانية متاحة اليوم!";
-}
-function spinWheel(){
- if(wheelBusy||state.wheelDate===dateKey())return;
- const index=Math.floor(Math.random()*prizes.length),prize=prizes[index];
- state.wheelDate=dateKey();state.points+=prize;persist();render();
- wheelBusy=true;document.getElementById("spinButton").disabled=true;
- document.getElementById("wheelResult").textContent="العجلة بتلف... 🍀";
- wheelRotation+=360*6+((360-(index*60+30)+360)%360);
- document.getElementById("wheel").style.transform="rotate("+wheelRotation+"deg)";
- setTimeout(()=>{wheelBusy=false;document.getElementById("wheelResult").textContent="🎉 مبروك! كسبت "+prize+" نقطة!";renderWheel();render();},4100);
-}
-
-/* لعبة السباق */
-const canvas=document.getElementById("raceCanvas"),ctx=canvas.getContext("2d");
-const W=360,H=480;
-let race={running:false,over:true,score:0,speed:1,playerLane:1,obstacles:[],spawn:0,roadOffset:0,last:0,holdLeft:false,holdRight:false,slow:false,rewarded:false};
-function laneX(lane){return 74+lane*106;}
-function resetRace(){
- race.score=0;race.speed=1;race.playerLane=1;race.obstacles=[];race.spawn=0;race.roadOffset=0;race.last=0;race.rewarded=false;
- document.getElementById("raceScore").textContent="0";
- document.getElementById("raceSpeed").textContent="1";
-}
-function startRace(){
- if(race.running)return;
- resetRace();race.running=true;race.over=false;
- document.getElementById("raceStart").disabled=true;
- document.getElementById("raceStart").textContent="🏁 السباق شغال";
- document.getElementById("raceMessage").textContent="انطلق! تفادى العربيات 🚦";
- race.last=performance.now();requestAnimationFrame(raceFrame);
-}
-function endRace(){
- if(!race.running)return;
- race.running=false;race.over=true;
- document.getElementById("raceStart").disabled=false;
- document.getElementById("raceStart").textContent="🔄 العب مرة أخرى";
- const score=Math.floor(race.score);
- state.raceRuns++;state.raceTotal+=score;
- if(score>state.raceBest)state.raceBest=score;
- const reward=Math.floor(score/50);
- if(reward>0)state.points+=reward;
- persist();render();
- document.getElementById("raceMessage").textContent="انتهى السباق! نتيجتك "+score+" — "+(reward?"كسبت "+reward+" نقطة!":"جرّب تصمد مدة أطول لكسب نقاط.");
- drawRace(true);
-}
-function raceFrame(now){
- if(!race.running)return;
- const dt=Math.min(32,now-race.last||16);race.last=now;
- updateRace(dt);drawRace(false);
- if(race.running)requestAnimationFrame(raceFrame);
-}
-function updateRace(dt){
- const factor=dt/16.67;
- if(race.holdLeft)race.playerLane=Math.max(0,race.playerLane-0.07*factor);
- if(race.holdRight)race.playerLane=Math.min(2,race.playerLane+0.07*factor);
- race.playerLane=Math.max(0,Math.min(2,race.playerLane));
- race.speed=Math.min(3.3,1+race.score/600);
- const speed=(race.slow?2.5:4.1)*race.speed*factor;
- race.roadOffset=(race.roadOffset+speed*2)%60;
- race.score+=factor*race.speed;
- race.spawn+=dt;
- const interval=Math.max(430,1050-race.speed*180);
- if(race.spawn>interval){
-  race.spawn=0;
-  const lane=Math.floor(Math.random()*3);
-  race.obstacles.push({lane,y:-75,type:Math.random()<0.2?"cone":"car",color:["#ef4444","#f59e0b","#8b5cf6","#06b6d4"][Math.floor(Math.random()*4)]});
- }
- for(const o of race.obstacles)o.y+=speed*2.3;
- race.obstacles=race.obstacles.filter(o=>o.y<H+80);
- const px=laneX(Math.round(race.playerLane)),py=H-78;
- for(const o of race.obstacles){
-  const ox=laneX(o.lane);
-  if(Math.abs(px-ox)<39&&Math.abs(py-o.y)<49){endRace();return;}
- }
- document.getElementById("raceScore").textContent=Math.floor(race.score);
- document.getElementById("raceSpeed").textContent=race.speed.toFixed(1)+"x";
-}
-function drawCar(x,y,color,player){
- ctx.save();ctx.translate(x,y);
- ctx.fillStyle="#09090b";ctx.fillRect(-23,-27,8,19);ctx.fillRect(15,-27,8,19);ctx.fillRect(-23,12,8,19);ctx.fillRect(15,12,8,19);
- ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(-18,-35,36,70,9);ctx.fill();
- ctx.fillStyle=player?"#a5f3fc":"#dbeafe";ctx.beginPath();ctx.roundRect(-12,-23,24,17,4);ctx.fill();
- ctx.fillStyle="#111827";ctx.fillRect(-12,2,24,12);
- ctx.fillStyle="#fef08a";ctx.fillRect(-14,-34,8,5);ctx.fillRect(6,-34,8,5);
- ctx.fillStyle="#ef4444";ctx.fillRect(-14,29,8,4);ctx.fillRect(6,29,8,4);
- ctx.restore();
-}
-function drawRace(gameOver){
- ctx.clearRect(0,0,W,H);
- ctx.fillStyle="#237341";ctx.fillRect(0,0,W,H);
- ctx.fillStyle="#30313b";ctx.fillRect(34,0,292,H);
- ctx.fillStyle="#f8fafc";ctx.fillRect(38,0,4,H);ctx.fillRect(322,0,4,H);
- ctx.strokeStyle="#f8fafc";ctx.lineWidth=4;ctx.setLineDash([28,24]);
- ctx.lineDashOffset=-race.roadOffset;
- ctx.beginPath();ctx.moveTo(140,0);ctx.lineTo(140,H);ctx.moveTo(220,0);ctx.lineTo(220,H);ctx.stroke();ctx.setLineDash([]);
- for(const o of race.obstacles){
-  if(o.type==="cone"){
-   const x=laneX(o.lane);ctx.fillStyle="#fb923c";ctx.beginPath();ctx.moveTo(x,o.y-24);ctx.lineTo(x-19,o.y+22);ctx.lineTo(x+19,o.y+22);ctx.closePath();ctx.fill();
-   ctx.fillStyle="white";ctx.fillRect(x-12,o.y+4,24,5);
-  }else drawCar(laneX(o.lane),o.y,o.color,false);
- }
- drawCar(laneX(Math.round(race.playerLane)),H-78,"#22c55e",true);
- if(gameOver){
-  ctx.fillStyle="#09090be0";ctx.fillRect(42,180,276,100);
-  ctx.fillStyle="#fff";ctx.textAlign="center";ctx.font="bold 24px Arial";ctx.fillText("انتهى السباق!",180,220);
-  ctx.font="17px Arial";ctx.fillText("النتيجة: "+Math.floor(race.score),180,252);
- }
-}
-function moveLane(dir){
- if(!race.running)return;
- race.playerLane=Math.max(0,Math.min(2,race.playerLane+dir));
-}
-function bindHold(id,field){
- const el=document.getElementById(id);
- const down=e=>{e.preventDefault();race[field]=true;};
- const up=e=>{e.preventDefault();race[field]=false;};
- el.addEventListener("pointerdown",down);
- ["pointerup","pointercancel","pointerleave"].forEach(ev=>el.addEventListener(ev,up));
-}
-bindHold("leftBtn","holdLeft");bindHold("rightBtn","holdRight");
-document.getElementById("brakeBtn").addEventListener("pointerdown",e=>{e.preventDefault();race.slow=true;});
-["pointerup","pointercancel","pointerleave"].forEach(ev=>document.getElementById("brakeBtn").addEventListener(ev,()=>race.slow=false));
-document.addEventListener("keydown",e=>{
- if(["ArrowLeft","ArrowRight"," "].includes(e.key))e.preventDefault();
- if(e.key==="ArrowLeft"||e.key.toLowerCase()==="a")race.holdLeft=true;
- if(e.key==="ArrowRight"||e.key.toLowerCase()==="d")race.holdRight=true;
- if(e.key==="ArrowDown")race.slow=true;
- if(e.key===" "&&!race.running)startRace();
-});
-document.addEventListener("keyup",e=>{
- if(e.key==="ArrowLeft"||e.key.toLowerCase()==="a")race.holdLeft=false;
- if(e.key==="ArrowRight"||e.key.toLowerCase()==="d")race.holdRight=false;
- if(e.key==="ArrowDown")race.slow=false;
-});
-canvas.addEventListener("pointerdown",e=>{
- if(!race.running)return;
- const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)/r.width;
- if(x<0.4)moveLane(-1);else if(x>0.6)moveLane(1);
-});
-drawRace(false);
-
-/* اختبار المعلومات */
-const questions=[
-{q:"ما عاصمة مصر؟",a:["القاهرة","الإسكندرية","الأقصر"],c:0},
-{q:"كم يساوي 9 × 7؟",a:["54","63","72"],c:1},
-{q:"ما الكوكب الأحمر؟",a:["الزهرة","المريخ","زحل"],c:1},
-{q:"ما ناتج تجمد الماء؟",a:["بخار","ثلج","ملح"],c:1},
-{q:"كم ضلعًا للمثلث؟",a:["3","4","5"],c:0},
-{q:"ما لغة هيكلة صفحات الويب؟",a:["HTML","PNG","MP3"],c:0},
-{q:"ما مصدر الطاقة الشمسية؟",a:["ضوء الشمس","الصخور فقط","الصوت"],c:0}
-];
-let quizOrder=[],qi=0,quizAnswered=false;
-function startQuiz(){quizOrder=questions.map((_,i)=>i).sort(()=>Math.random()-.5);qi=0;state.quizRuns++;persist();document.getElementById("quizStart").hidden=true;document.getElementById("quizNext").hidden=false;showQuestion();}
-function showQuestion(){quizAnswered=false;const q=questions[quizOrder[qi]];document.getElementById("question").textContent=(qi+1)+"/"+quizOrder.length+" — "+q.q;document.getElementById("quizResult").textContent="";document.getElementById("quizNext").textContent=qi===quizOrder.length-1?"إنهاء الاختبار":"السؤال التالي";document.getElementById("answers").innerHTML=q.a.map((a,i)=>'<button class="answer" onclick="answerQuiz('+i+')">'+a+'</button>').join("");}
-function answerQuiz(n){if(quizAnswered)return;quizAnswered=true;const q=questions[quizOrder[qi]];document.querySelectorAll(".answer").forEach(b=>b.disabled=true);if(n===q.c){state.quizCorrect++;addPoints(10);document.getElementById("quizResult").textContent="إجابة صحيحة! +10 نقاط 🎉";}else document.getElementById("quizResult").textContent="الإجابة الصحيحة: "+q.a[q.c];persist();render();}
-function nextQuestion(){if(qi<quizOrder.length-1){qi++;showQuestion();}else{document.getElementById("question").textContent="خلصت الاختبار! أحسنت 👏";document.getElementById("answers").innerHTML="";document.getElementById("quizStart").hidden=false;document.getElementById("quizNext").hidden=true;}}
-
-/* تحدي الضغطات */
-let taps=0,tapActive=false,tapTimer=null;
-function startTap(){clearInterval(tapTimer);taps=0;tapActive=true;document.getElementById("tapCount").textContent="0";document.getElementById("timeLeft").textContent="10";document.getElementById("tapResult").textContent="";document.getElementById("tapButton").disabled=false;document.getElementById("tapStart").disabled=true;let left=10;tapTimer=setInterval(()=>{left--;document.getElementById("timeLeft").textContent=left;if(left<=0)finishTap();},1000);}
-function tap(){if(!tapActive)return;taps++;state.totalTaps++;document.getElementById("tapCount").textContent=taps;}
-function finishTap(){clearInterval(tapTimer);tapActive=false;document.getElementById("tapButton").disabled=true;document.getElementById("tapStart").disabled=false;state.tapRuns++;state.points+=taps;if(taps>state.best)state.best=taps;document.getElementById("tapResult").textContent="انتهى التحدي! سجلت "+taps+" ضغطة وجمعت "+taps+" نقطة.";persist();render();}
-
-/* الحساب */
-let currentMath=0,mathDone=true;
-function newMath(){const a=Math.floor(Math.random()*12)+1,b=Math.floor(Math.random()*12)+1,ops=["+","-","×"],op=ops[Math.floor(Math.random()*3)];let x=a,y=b;if(op==="-"&&b>a){x=b;y=a;}currentMath=op==="+"?x+y:op==="-"?x-y:x*y;document.getElementById("mathQuestion").textContent="كم يساوي "+x+" "+op+" "+y+"؟";document.getElementById("mathAnswer").value="";document.getElementById("mathResult").textContent="";mathDone=false;}
-function checkMath(){if(mathDone){document.getElementById("mathResult").textContent="اضغط سؤال جديد للمواصلة.";return;}const v=document.getElementById("mathAnswer").value.trim();if(v===""){document.getElementById("mathResult").textContent="اكتب إجابتك الأول.";return;}if(Number(v)===currentMath){mathDone=true;state.mathCorrect++;addPoints(10);document.getElementById("mathResult").textContent="إجابة صحيحة! +10 نقاط 🎉";persist();render();}else document.getElementById("mathResult").textContent="حاول تاني وراجع العملية الحسابية.";}
-function saveNotes(){state.notes=document.getElementById("notes").value;persist();document.getElementById("notesResult").textContent="تم حفظ الملاحظات ✅";}
-function clearNotes(){if(confirm("متأكد إنك عايز تمسح الملاحظات؟")){state.notes="";document.getElementById("notes").value="";persist();document.getElementById("notesResult").textContent="تم مسح الملاحظات.";}}
-function calculate(){
- const s=document.getElementById("calcInput").value.trim(),out=document.getElementById("calcResult");
- if(!s||!/^[0-9+\-*/().\s]+$/.test(s)){out.textContent="اكتب عملية صحيحة بالأرقام والرموز المسموحة.";return;}
- try{
- let p=0;function ws(){while(s[p]===" ")p++;}
- function expr(){let v=term();ws();while(s[p]==="+"||s[p]==="-"){let op=s[p++],n=term();v=op==="+"?v+n:v-n;ws();}return v;}
- function term(){let v=factor();ws();while(s[p]==="*"||s[p]==="/"){let op=s[p++],n=factor();if(op==="/"&&n===0)throw 0;v=op==="*"?v*n:v/n;ws();}return v;}
- function factor(){ws();if(s[p]==="+"){p++;return factor();}if(s[p]==="-"){p++;return -factor();}if(s[p]==="("){p++;let v=expr();ws();if(s[p++]!==")")throw 0;return v;}let m=s.slice(p).match(/^(?:\d+\.?\d*|\.\d+)/);if(!m)throw 0;p+=m[0].length;return Number(m[0]);}
- const v=expr();ws();if(p!==s.length||!Number.isFinite(v))throw 0;out.textContent="الناتج: "+v;
- }catch(e){out.textContent="العملية غير صحيحة. راجع الأرقام والأقواس.";}
-}
-const ideas=["ذاكر 25 دقيقة ثم خذ راحة قصيرة.","ابدأ بأصعب سؤال وأنت مركز.","راجع أخطاءك القديمة؛ منها تتعلم أسرع.","قسّم هدفك الكبير لخطوات صغيرة.","جرّب تتعلم معلومة جديدة اليوم.","رتّب مكانك قبل المذاكرة.","استمر حتى لو التقدم بسيط."];
-function showIdea(){document.getElementById("dailyIdea").textContent=ideas[Math.floor(Math.random()*ideas.length)];}
-function resetProgress(){
- if(!confirm("هيتم مسح النقاط والمشتريات والإنجازات وسجل العجلة والسباقات. متأكد؟"))return;
- const name=state.name,notes=state.notes;state={...defaults,name,notes};persist();render();
- document.getElementById("raceMessage").textContent="تمت إعادة ضبط التقدم.";drawRace(false);
-}
-document.getElementById("notes").value=state.notes||"";
-render();newMath();showIdea();
-</script>
-</body>
-</html>
