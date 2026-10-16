@@ -1,126 +1,193 @@
 
-/* Ehab Interactive — مهمات التوصيل */
-(function () {
-  const style = document.createElement("style");
-  style.textContent = `
-    .delivery-box {
-      background: linear-gradient(135deg,#172c48,#10182b);
-      border: 1px solid #426083;
-      border-radius: 16px;
-      padding: 16px;
-      margin: 12px 0;
-    }
-    .delivery-box h3 { margin-top: 0; }
-    .delivery-status { color: #9ee8c4; margin: 10px 0; }
-  `;
-  document.head.appendChild(style);
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ehab Interactive</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080d1b;color:#fff;font-family:Arial,sans-serif}
+header{padding:30px 15px;text-align:center;background:linear-gradient(135deg,#122d65,#7028a8)}
+header h1{font-size:32px;margin:0}
+header p{color:#e2ddff}
+nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:12px;background:#10182c;position:sticky;top:0}
+button{border:0;padding:12px 16px;border-radius:12px;background:#293858;color:white;font-weight:bold;cursor:pointer}
+button:active{transform:scale(.97)}
+button:hover,.primary{background:#754bff}
+main{max-width:950px;margin:auto;padding:16px}
+section{display:none}
+section.active{display:block}
+.hero,.card,.game{border:1px solid #2d3d61;border-radius:18px;background:#131d32;padding:20px;margin-bottom:15px}
+.hero{background:linear-gradient(130deg,#182e5a,#35205c)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.card{text-align:center}
+.emoji{font-size:42px}
+.card p,.muted{color:#bdc8df;line-height:1.7}
+h2{margin-top:0}
+input{width:100%;padding:13px;margin:8px 0;border-radius:10px;border:1px solid #46587c;background:#080f20;color:white;font-size:17px}
+#result{font-size:19px;line-height:1.8;margin-top:15px}
+.score{font-size:55px;color:#b3a0ff;font-weight:bold}
+footer{text-align:center;color:#9eabc8;padding:25px}
+</style>
+</head>
+<body>
+<header>
+<h1>🚀 Ehab Interactive</h1>
+<p>عالمك التفاعلي — العب واختبر ذكاءك!</p>
+</header>
 
-  let active = false;
-  let startDistance = 0;
-  let reward = 40;
-  let destination = "";
+<nav>
+<button onclick="showPage('home')">🏠 الرئيسية</button>
+<button onclick="showPage('games')">🎮 الألعاب</button>
+<button onclick="showPage('points')">🏆 نقاطي</button>
+<button onclick="showPage('about')">ℹ️ عن الموقع</button>
+</nav>
 
-  const panel = document.createElement("div");
-  panel.className = "delivery-box";
-  panel.innerHTML = `
-    <h3>📦 مهمات توصيل Ehab</h3>
-    <p>وصّل الطلب للوجهة المحددة واجمع مكافأتك!</p>
-    <div>📍 الوجهة: <b id="deliveryDestination">لم تبدأ بعد</b></div>
-    <div>🛣️ المطلوب: 100 متر قيادة</div>
-    <div class="delivery-status" id="deliveryStatus">
-      جاهز لاستلام أول طلب؟
-    </div>
-    <button id="deliveryStart">🚚 ابدأ التوصيل</button>
-    <button id="deliveryClaim" class="green" disabled>
-      استلام المكافأة 🪙
-    </button>
-  `;
+<main>
+<section id="home" class="active">
+<div class="hero">
+<h2>أهلاً بيك يا بطل! 👋</h2>
+<p>أهلاً بك في Ehab Interactive، اختار لعبتك وابدأ التحدي.</p>
+<button class="primary" onclick="showPage('games')">ابدأ اللعب 🚀</button>
+</div>
+<div class="grid">
+<div class="card"><div class="emoji">🎯</div><h3>خمن الرقم</h3><p>هل تقدر تعرف الرقم السري؟</p><button onclick="startGuess()">العب الآن</button></div>
+<div class="card"><div class="emoji">🧠</div><h3>تحدي الحساب</h3><p>اختبر مهاراتك في الرياضيات.</p><button onclick="startMath()">العب الآن</button></div>
+<div class="card"><div class="emoji">🏆</div><h3>النقاط</h3><p>تابع تقدمك وإنجازاتك.</p><button onclick="showPage('points')">عرض النقاط</button></div>
+</div>
+</section>
 
-  const missionsSection = document.getElementById("missions");
-  if (missionsSection) {
-    missionsSection.querySelector(".card").prepend(panel);
-  }
+<section id="games">
+<h2>🎮 اختار لعبتك</h2>
+<div class="grid">
+<div class="card"><div class="emoji">🎯</div><h3>خمن الرقم</h3><p>خمن رقم من 1 إلى 10.</p><button class="primary" onclick="startGuess()">ابدأ</button></div>
+<div class="card"><div class="emoji">🧮</div><h3>تحدي الحساب</h3><p>حل مسائل حسابية واكسب نقاط.</p><button class="primary" onclick="startMath()">ابدأ</button></div>
+<div class="card"><div class="emoji">🎲</div><h3>رقم الحظ</h3><p>اكتشف رقمك العشوائي.</p><button class="primary" onclick="luck()">جرّب</button></div>
+</div>
+<div class="game">
+<h3 id="gameTitle">اختار لعبة من فوق 👆</h3>
+<div id="gameArea"></div>
+<div id="result"></div>
+</div>
+</section>
 
-  const destinations = [
-    "متجر المدينة 🏪",
-    "محطة البنزين ⛽",
-    "الحي السكني 🏠",
-    "مركز المدينة 🏙️",
-    "محطة القطار 🚉"
-  ];
+<section id="points">
+<div class="hero">
+<h2>🏆 رصيد نقاطك</h2>
+<div class="score" id="score">0</div>
+<p>كل إجابة صحيحة تضيف 10 نقاط.</p>
+<button onclick="resetPoints()">إعادة النقاط للصفر</button>
+</div>
+</section>
 
-  const startButton = document.getElementById("deliveryStart");
-  const claimButton = document.getElementById("deliveryClaim");
-  const status = document.getElementById("deliveryStatus");
-  const destinationLabel =
-    document.getElementById("deliveryDestination");
+<section id="about">
+<div class="hero">
+<h2>ℹ️ عن Ehab Interactive</h2>
+<p>مشروع تفاعلي من تصميم إيهاب، هدفه تقديم ألعاب وتحديات ممتعة للجميع.</p>
+<p>الإصدار الأول — ولسه فيه تطويرات جاية! 🚀</p>
+</div>
+</section>
+</main>
 
-  startButton.addEventListener("click", function () {
-    if (active) {
-      toast("أكمل مسافة التوصيل أولًا!");
-      return;
-    }
+<footer>صُنع بكل حب ❤️ بواسطة إيهاب</footer>
 
-    if (!gameReady) {
-      toast("افتح المدينة وانتظر تحميلها أولًا!");
-      return;
-    }
+<script>
+let points=0;
+try{points=Number(localStorage.getItem('ehabInteractivePoints'))||0}catch(e){}
 
-    active = true;
-    driving = true;
-    startDistance = distanceNow;
-    reward = 40 + Math.floor(Math.random() * 31);
-    destination =
-      destinations[Math.floor(Math.random() * destinations.length)];
+function savePoints(){
+try{localStorage.setItem('ehabInteractivePoints',String(points))}catch(e){}
+document.getElementById('score').textContent=points;
+}
 
-    destinationLabel.textContent = destination;
-    status.textContent = "🚚 الطلب معاك! سوق 100 متر لإكمال المهمة.";
-    startButton.disabled = true;
-    claimButton.disabled = true;
+function showPage(id){
+document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+window.scrollTo({top:0,behavior:'smooth'});
+savePoints();
+}
 
-    showTab("city");
-    toast("بدأت مهمة التوصيل! انطلق 🚗");
-  });
+function setupGame(title,html){
+showPage('games');
+document.getElementById('gameTitle').textContent=title;
+document.getElementById('gameArea').innerHTML=html;
+document.getElementById('result').textContent='';
+}
 
-  claimButton.addEventListener("click", function () {
-    if (!active || distanceNow - startDistance < 100) {
-      toast("لسه ما كملتش مسافة التوصيل!");
-      return;
-    }
+let secret=0,tries=0,mathAnswer=0;
 
-    active = false;
-    data.points += reward;
-    save();
+function startGuess(){
+secret=Math.floor(Math.random()*10)+1;
+tries=0;
+setupGame('🎯 خمن الرقم السري',
+'<p>أنا اخترت رقم من 1 إلى 10. خمنه!</p>'+
+'<input id="guessInput" type="number" min="1" max="10" placeholder="اكتب رقمك هنا">'+
+'<button class="primary" onclick="checkGuess()">تحقق من الإجابة</button>'+
+'<button onclick="startGuess()">لعبة جديدة</button>');
+}
 
-    status.textContent =
-      "✅ تم التوصيل بنجاح! مكافأتك " + reward + " نقطة.";
-    startButton.disabled = false;
-    claimButton.disabled = true;
+function checkGuess(){
+let input=document.getElementById('guessInput');
+let n=Number(input.value);
+let r=document.getElementById('result');
+if(input.value===''||!Number.isInteger(n)||n<1||n>10){
+r.textContent='اكتب رقمًا صحيحًا من 1 إلى 10.';
+return;
+}
+tries++;
+if(n===secret){
+points+=10;
+savePoints();
+r.textContent='🎉 برافو! إجابة صحيحة، كسبت 10 نقاط! عدد المحاولات: '+tries;
+}else{
+r.textContent=n<secret?'⬆️ الرقم السري أكبر! حاول تاني.':'⬇️ الرقم السري أصغر! حاول تاني.';
+}
+}
 
-    toast("برافو! كسبت " + reward + " نقطة 🪙");
-    renderMissions();
-    renderAchievements();
-  });
+function startMath(){
+let a=Math.floor(Math.random()*20)+1;
+let b=Math.floor(Math.random()*20)+1;
+let op=Math.random()<.5?'+':'-';
+mathAnswer=op==='+'?a+b:a-b;
+setupGame('🧠 تحدي الحساب',
+'<p>حل المسألة دي:</p><h2>'+a+' '+op+' '+b+' = ؟</h2>'+
+'<input id="mathInput" type="number" placeholder="اكتب الإجابة">'+
+'<button class="primary" onclick="checkMath()">تحقق من الإجابة</button>'+
+'<button onclick="startMath()">مسألة جديدة</button>');
+}
 
-  const oldAnimate = window.finishDrive;
-  // المهمة تظل مرتبطة بمسافة القيادة الفعلية.
-  window.addEventListener("beforeunload", function () {
-    save();
-  });
+function checkMath(){
+let input=document.getElementById('mathInput');
+let r=document.getElementById('result');
+if(input.value===''){r.textContent='اكتب إجابتك الأول.';return;}
+if(Number(input.value)===mathAnswer){
+points+=10;
+savePoints();
+r.textContent='🎉 إجابة صحيحة! كسبت 10 نقاط.';
+}else{
+r.textContent='❌ مش دي الإجابة الصح. جرّب مسألة جديدة!';
+}
+}
 
-  const observer = setInterval(function () {
-    if (!active) return;
+function luck(){
+setupGame('🎲 رقم الحظ','<button class="primary" onclick="rollLuck()">اكشف رقمك</button>');
+}
 
-    const travelled = distanceNow - startDistance;
+function rollLuck(){
+let n=Math.floor(Math.random()*100)+1;
+document.getElementById('gameArea').innerHTML='<h2 style="font-size:45px;color:#b3a0ff">'+n+'</h2><button class="primary" onclick="rollLuck()">جرّب مرة تانية</button>';
+document.getElementById('result').textContent='رقم عشوائي للمتعة فقط 😄';
+}
 
-    if (travelled >= 100) {
-      status.textContent =
-        "🎉 وصلت! اضغط استلام المكافأة للحصول على " +
-        reward + " نقطة.";
-      claimButton.disabled = false;
-    } else {
-      status.textContent =
-        "🚚 باقي " + Math.ceil(100 - travelled) + " متر للتوصيل.";
-    }
-  }, 300);
-})();
+function resetPoints(){
+if(confirm('متأكد إنك عايز تصفر نقاطك؟')){
+points=0;
+savePoints();
+}
+}
+
+savePoints();
+</script>
+</body>
+</html>
