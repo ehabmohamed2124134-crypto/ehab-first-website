@@ -2,483 +2,624 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#10172a">
-  <meta name="description" content="موقع إيهاب التفاعلي: ألعاب وتحديات واختبارات وأدوات مجانية للجميع.">
-  <title>موقع إيهاب التفاعلي</title>
-  <style>
-    * { box-sizing: border-box; }
-    :root {
-      --bg: #0b1020;
-      --panel: #151d33;
-      --text: #f5f7ff;
-      --muted: #aab5d0;
-      --accent: #7c6cff;
-      --cyan: #36d9ee;
-    }
-    body {
-      margin: 0;
-      font-family: Tahoma, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.8;
-    }
-    button, input { font: inherit; }
-    button { cursor: pointer; }
-    a { color: inherit; text-decoration: none; }
-    header {
-      padding: 15px 6%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      flex-wrap: wrap;
-      background: #11182b;
-      border-bottom: 1px solid #29324b;
-    }
-    .logo { font-size: 21px; font-weight: bold; }
-    .logo span { color: var(--cyan); }
-    nav { display: flex; flex-wrap: wrap; gap: 14px; }
-    nav a { color: var(--muted); font-size: 14px; }
-    nav a:hover { color: white; }
-    .hero {
-      padding: 65px 6% 45px;
-      text-align: center;
-      background: radial-gradient(ellipse at top, #29215d 0%, var(--bg) 68%);
-    }
-    .tag {
-      display: inline-block;
-      border: 1px solid #5149a1;
-      background: #211c49;
-      color: #d7d2ff;
-      border-radius: 30px;
-      padding: 4px 14px;
-      font-size: 13px;
-    }
-    h1 { font-size: clamp(30px, 6vw, 48px); margin: 15px 0 8px; }
-    h1 span { color: var(--cyan); }
-    .hero p { max-width: 600px; margin: 0 auto 22px; color: var(--muted); }
-    .btn {
-      border: 0;
-      border-radius: 12px;
-      padding: 10px 17px;
-      background: var(--accent);
-      color: white;
-      font-weight: bold;
-    }
-    .btn:hover { filter: brightness(1.13); }
-    .btn.alt { background: #26334e; }
-    .stats {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 30px;
-    }
-    .stat {
-      min-width: 120px;
-      padding: 12px 18px;
-      border: 1px solid #303b58;
-      background: #151d33cc;
-      border-radius: 14px;
-    }
-    .stat strong { display: block; font-size: 22px; color: var(--cyan); }
-    .stat small { color: var(--muted); }
-    main { max-width: 1100px; margin: auto; padding: 25px 6% 55px; }
-    .section-head { margin: 28px 0 16px; }
-    .section-head h2 { margin: 0; font-size: 25px; }
-    .section-head p { color: var(--muted); margin: 4px 0; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-    }
-    .card {
-      background: var(--panel);
-      border: 1px solid #293550;
-      border-radius: 18px;
-      padding: 20px;
-      min-width: 0;
-    }
-    .card .emoji { font-size: 34px; }
-    .card h3 { margin: 5px 0; }
-    .card p { color: var(--muted); font-size: 14px; }
-    .card button { width: 100%; margin-top: 8px; }
-    .activity { margin-top: 22px; }
-    .activity h2 { margin-top: 0; }
-    .result { color: var(--cyan); min-height: 28px; font-weight: bold; }
-    .answers { display: grid; gap: 9px; margin-top: 12px; }
-    .answers button {
-      text-align: right;
-      background: #222d48;
-      color: white;
-      border: 1px solid #384564;
-      border-radius: 10px;
-      padding: 11px;
-    }
-    .answers button:hover { background: #343d68; }
-    .tool-row { display: flex; flex-wrap: wrap; gap: 8px; }
-    input {
-      background: #0c1428;
-      border: 1px solid #3a4664;
-      border-radius: 10px;
-      color: white;
-      padding: 11px;
-      min-width: 0;
-      flex: 1;
-    }
-    .note {
-      width: 100%;
-      min-height: 110px;
-      background: #0c1428;
-      color: white;
-      border: 1px solid #3a4664;
-      border-radius: 10px;
-      padding: 12px;
-      resize: vertical;
-    }
-    footer {
-      text-align: center;
-      padding: 25px 6%;
-      background: #11182b;
-      color: var(--muted);
-      border-top: 1px solid #29324b;
-      font-size: 13px;
-    }
-    .hidden { display: none; }
-    .notice { color: var(--muted); font-size: 12px; }
-    @media (max-width: 520px) {
-      header { justify-content: center; }
-      nav { justify-content: center; }
-      .hero { padding-top: 42px; }
-      main { padding-left: 4%; padding-right: 4%; }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <a class="logo" href="#home">🚀 إيهاب <span>التفاعلي</span></a>
-    <nav>
-      <a href="#home">الرئيسية</a>
-      <a href="#games">الألعاب</a>
-      <a href="#tools">الأدوات</a>
-      <a href="#about">عن الموقع</a>
-    </nav>
-  </header>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b1020">
+<meta name="description" content="موقع إيهاب التفاعلي للألعاب والاختبارات والأدوات المجانية">
+<title>موقع إيهاب التفاعلي</title>
 
-  <section class="hero" id="home">
-    <span class="tag">✨ عالمك التفاعلي المجاني</span>
-    <h1>أهلاً بك في <span>موقع إيهاب</span></h1>
-    <p>العب، اختبر ذكاءك، جرّب أدوات مفيدة، واجمع النقاط. كل ده في مكان واحد!</p>
-    <button class="btn" onclick="document.querySelector('#games').scrollIntoView({behavior:'smooth'})">
-      اكتشف الموقع ←
-    </button>
-    <div class="stats">
-      <div class="stat"><strong id="points">0</strong><small>نقاطك ⭐</small></div>
-      <div class="stat"><strong>4</strong><small>تجارب تفاعلية</small></div>
-      <div class="stat"><strong>مجاني</strong><small>بدون اشتراك</small></div>
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#0b1020;--panel:#151d33;--text:#f5f7ff;
+  --muted:#aab5d0;--accent:#7c6cff;--cyan:#36d9ee;
+}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Tahoma,Arial,sans-serif;line-height:1.8;
+}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+header{
+  padding:16px 5%;display:flex;justify-content:space-between;
+  align-items:center;gap:15px;flex-wrap:wrap;
+  background:#11182b;border-bottom:1px solid #29324b;
+}
+.logo{font-size:21px;font-weight:bold}
+.logo span,h1 span{color:var(--cyan)}
+nav{display:flex;gap:15px;flex-wrap:wrap}
+nav a{color:var(--muted);text-decoration:none;font-size:14px}
+nav a:hover{color:white}
+.hero{
+  padding:60px 5%;text-align:center;
+  background:radial-gradient(ellipse at top,#29215d,var(--bg) 70%);
+}
+.tag{
+  display:inline-block;padding:4px 14px;border-radius:30px;
+  background:#211c49;border:1px solid #5149a1;color:#ddd8ff;
+}
+h1{font-size:clamp(30px,6vw,48px);margin:16px 0 8px}
+.hero p{max-width:650px;margin:0 auto 20px;color:var(--muted)}
+.btn{
+  background:var(--accent);color:white;border:0;border-radius:11px;
+  padding:10px 17px;font-weight:bold;
+}
+.btn:hover{filter:brightness(1.15)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.alt{background:#293650}
+.stats{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:28px}
+.stat{background:#151d33;border:1px solid #303b58;border-radius:14px;padding:10px 20px;min-width:115px}
+.stat strong{display:block;font-size:23px;color:var(--cyan)}
+.stat small{color:var(--muted)}
+main{max-width:1100px;margin:auto;padding:20px 5% 50px}
+.section-head{margin:28px 0 16px}
+.section-head h2{margin:0;font-size:25px}
+.section-head p,.card p{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid #293550;border-radius:17px;padding:20px;min-width:0}
+.card h3{margin:5px 0}
+.card p{font-size:14px}
+.emoji{font-size:34px}
+.card .btn{width:100%;margin-top:8px}
+.activity{margin-top:20px}
+.hidden{display:none!important}
+.tool-row{display:flex;gap:8px;flex-wrap:wrap}
+input,textarea{
+  background:#0c1428;border:1px solid #3a4664;color:white;
+  border-radius:10px;padding:11px;min-width:0;
+}
+input{flex:1}
+textarea{width:100%;min-height:110px;resize:vertical}
+.result{color:var(--cyan);font-weight:bold;min-height:25px}
+.answers{display:grid;gap:9px;margin-top:12px}
+.answers button{
+  text-align:right;background:#222d48;color:white;
+  border:1px solid #384564;border-radius:10px;padding:11px;
+}
+.answers button:hover{background:#343d68}
+footer{text-align:center;padding:25px;background:#11182b;color:var(--muted);font-size:13px}
+.notice{font-size:12px!important;color:var(--muted)}
+@media(max-width:520px){
+  header{justify-content:center}
+  nav{justify-content:center}
+  .hero{padding:40px 5%}
+  main{padding-left:4%;padding-right:4%}
+}
+</style>
+</head>
+
+<body>
+<header>
+  <a class="logo" href="#home">🚀 إيهاب <span>التفاعلي</span></a>
+  <nav>
+    <a href="#home">الرئيسية</a>
+    <a href="#games">الألعاب</a>
+    <a href="#tools">الأدوات</a>
+    <a href="#about">عن الموقع</a>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <span class="tag">✨ عالمك التفاعلي المجاني</span>
+  <h1>أهلاً بيك في <span>موقع إيهاب!</span></h1>
+  <p>العب، اختبر ذكاءك، اجمع النقاط، واستخدم أدوات مفيدة في مكان واحد.</p>
+  <button class="btn" onclick="goTo('games')">اكتشف الموقع ←</button>
+  <div class="stats">
+    <div class="stat"><strong id="points">0</strong><small>نقاطك ⭐</small></div>
+    <div class="stat"><strong id="bestTop">0</strong><small>أفضل نتيجة 🏆</small></div>
+    <div class="stat"><strong>مجاني</strong><small>بدون اشتراك</small></div>
+  </div>
+</section>
+
+<main>
+  <section class="card">
+    <h2>👋 أهلاً بيك في عالم إيهاب!</h2>
+    <p>اكتب اسمك عشان يظهر لك ترحيب خاص.</p>
+    <div class="tool-row">
+      <input id="playerName" maxlength="30" placeholder="اكتب اسمك هنا">
+      <button class="btn" onclick="savePlayer()">حفظ الاسم</button>
+    </div>
+    <p class="result" id="welcomePlayer">أهلاً بيك يا بطل! 🚀</p>
+    <p>🏆 أفضل نتيجة ليك: <strong id="bestScore">0</strong></p>
+    <p>⭐ إجمالي نقاطك: <strong id="playerPoints">0</strong></p>
+  </section>
+
+  <section id="games">
+    <div class="section-head">
+      <h2>🎮 الألعاب والتحديات</h2>
+      <p>اختار تجربة وابدأ اللعب فورًا.</p>
+    </div>
+
+    <div class="grid">
+      <article class="card">
+        <div class="emoji">🧠</div>
+        <h3>اختبار المعلومات</h3>
+        <p>جاوب عن أسئلة متنوعة واجمع النقاط.</p>
+        <button class="btn" onclick="showActivity('quiz');startQuiz()">ابدأ الاختبار</button>
+      </article>
+
+      <article class="card">
+        <div class="emoji">⚡</div>
+        <h3>تحدي الضغطات</h3>
+        <p>اجمع أكبر عدد من الضغطات خلال 10 ثوانٍ.</p>
+        <button class="btn" onclick="showActivity('clicker')">ابدأ التحدي</button>
+      </article>
+
+      <article class="card">
+        <div class="emoji">🔢</div>
+        <h3>تحدي الحساب</h3>
+        <p>حل المسائل واجمع النقاط.</p>
+        <button class="btn" onclick="showActivity('math');newMath()">العب الآن</button>
+      </article>
+
+      <article class="card">
+        <div class="emoji">📝</div>
+        <h3>دفتر الملاحظات</h3>
+        <p>اكتب أفكارك واحفظها على جهازك.</p>
+        <button class="btn" onclick="showActivity('notes');loadNotes()">افتح الدفتر</button>
+      </article>
     </div>
   </section>
 
-  <main>
-    <section id="games">
-      <div class="section-head">
-        <h2>🎮 جرّب بنفسك</h2>
-        <p>اختار تجربة وابدأ اللعب فورًا.</p>
-      </div>
-      <div class="grid">
-        <article class="card">
-          <div class="emoji">🧠</div>
-          <h3>اختبار الذكاء</h3>
-          <p>جاوب على أسئلة قصيرة واختبر معلوماتك.</p>
-          <button class="btn" onclick="showActivity('quiz')">ابدأ الاختبار</button>
-        </article>
-        <article class="card">
-          <div class="emoji">⚡</div>
-          <h3>تحدي الضغطات</h3>
-          <p>اجمع أكبر عدد من الضغطات خلال 10 ثوانٍ.</p>
-          <button class="btn" onclick="showActivity('clicker')">ابدأ التحدي</button>
-        </article>
-        <article class="card">
-          <div class="emoji">🔢</div>
-          <h3>تحدي الحساب</h3>
-          <p>حل مسألة حسابية واكسب نقاطًا إضافية.</p>
-          <button class="btn" onclick="showActivity('math')">العب الآن</button>
-        </article>
-        <article class="card">
-          <div class="emoji">📝</div>
-          <h3>دفتر الملاحظات</h3>
-          <p>اكتب أفكارك واحفظها على جهازك.</p>
-          <button class="btn" onclick="showActivity('notes')">افتح الدفتر</button>
-        </article>
-      </div>
-    </section>
+  <section class="card activity hidden" id="quiz">
+    <h2>🧠 اختبار المعلومات</h2>
+    <p id="question"></p>
+    <div class="answers" id="answers"></div>
+    <p class="result" id="quizResult"></p>
+    <button class="btn hidden" id="nextQuestion" onclick="nextQuiz()">التالي ←</button>
+    <button class="btn alt" onclick="hideActivities()">إغلاق</button>
+  </section>
 
-    <section class="card activity hidden" id="quiz">
-      <h2>🧠 اختبار المعلومات</h2>
-      <p id="question"></p>
-      <div class="answers" id="answers"></div>
-      <p class="result" id="quizResult"></p>
-      <button class="btn hidden" id="nextQuestion" onclick="nextQuiz()">السؤال التالي ←</button>
-      <button class="btn alt" onclick="hideActivities()">إغلاق</button>
-    </section>
+  <section class="card activity hidden" id="clicker">
+    <h2>⚡ تحدي الضغطات</h2>
+    <p>اضغط أكبر عدد ممكن من المرات قبل انتهاء الوقت!</p>
+    <p>الوقت المتبقي: <strong id="timer">10</strong> ثوانٍ</p>
+    <p>عدد الضغطات: <strong id="clickCount">0</strong></p>
+    <button class="btn" id="clickButton" onclick="clickPoint()" disabled>اضغط هنا!</button>
+    <button class="btn alt" id="startClick" onclick="startClicker()">ابدأ التحدي</button>
+    <p class="result" id="clickResult"></p>
+    <button class="btn alt" onclick="hideActivities()">إغلاق</button>
+  </section>
 
-    <section class="card activity hidden" id="clicker">
-      <h2>⚡ تحدي الضغطات</h2>
-      <p>اضغط على الزر أكبر عدد ممكن من المرات قبل انتهاء الوقت.</p>
-      <p>الوقت: <strong id="timer">10</strong> ثوانٍ</p>
-      <p>ضغطاتك: <strong id="clickCount">0</strong></p>
-      <button class="btn" id="clickButton" onclick="clickPoint()">اضغط هنا!</button>
-      <button class="btn alt" id="startClick" onclick="startClicker()">ابدأ من جديد</button>
-      <p class="result" id="clickResult"></p>
-      <button class="btn alt" onclick="hideActivities()">إغلاق</button>
-    </section>
+  <section class="card activity hidden" id="math">
+    <h2>🔢 تحدي الحساب</h2>
+    <p id="mathQuestion"></p>
+    <div class="tool-row">
+      <input id="mathAnswer" type="number" inputmode="numeric" placeholder="اكتب الإجابة">
+      <button class="btn" onclick="checkMath()">تحقق</button>
+    </div>
+    <p class="result" id="mathResult"></p>
+    <button class="btn alt" onclick="newMath()">مسألة جديدة</button>
+    <button class="btn alt" onclick="hideActivities()">إغلاق</button>
+  </section>
 
-    <section class="card activity hidden" id="math">
-      <h2>🔢 تحدي الحساب</h2>
-      <p id="mathQuestion"></p>
-      <div class="tool-row">
-        <input id="mathAnswer" type="number" inputmode="numeric" placeholder="اكتب الإجابة">
-        <button class="btn" onclick="checkMath()">تحقق</button>
-      </div>
-      <p class="result" id="mathResult"></p>
-      <button class="btn alt" onclick="newMath()">مسألة جديدة</button>
-      <button class="btn alt" onclick="hideActivities()">إغلاق</button>
-    </section>
+  <section class="card activity hidden" id="notes">
+    <h2>📝 دفتر ملاحظاتك</h2>
+    <p>ملاحظاتك محفوظة محليًا على هذا المتصفح.</p>
+    <textarea id="noteText" placeholder="اكتب أفكارك هنا..."></textarea>
+    <div class="tool-row" style="margin-top:10px">
+      <button class="btn" onclick="saveNote()">حفظ الملاحظات</button>
+      <button class="btn alt" onclick="clearNote()">مسح الملاحظات</button>
+    </div>
+    <p class="result" id="noteResult"></p>
+    <button class="btn alt" onclick="hideActivities()">إغلاق</button>
+  </section>
 
-    <section class="card activity hidden" id="notes">
-      <h2>📝 دفتر ملاحظاتك</h2>
-      <p>الملاحظات تُحفظ في مساحة التخزين المحلية لهذا المتصفح على جهازك.</p>
-      <textarea id="noteText" class="note" placeholder="اكتب فكرتك هنا..."></textarea>
-      <div class="tool-row" style="margin-top:10px">
-        <button class="btn" onclick="saveNote()">احفظ الملاحظات</button>
-        <button class="btn alt" onclick="clearNote()">مسح الملاحظات</button>
-      </div>
-      <p class="result" id="noteResult"></p>
-      <button class="btn alt" onclick="hideActivities()">إغلاق</button>
-    </section>
+  <section id="tools">
+    <div class="section-head">
+      <h2>🛠️ الأدوات المفيدة</h2>
+      <p>أدوات بسيطة تعمل مباشرة في المتصفح.</p>
+    </div>
 
-    <section id="tools">
-      <div class="section-head">
-        <h2>🛠️ أدوات مفيدة</h2>
-        <p>أدوات بسيطة تشتغل مباشرة في المتصفح.</p>
-      </div>
-      <div class="grid">
-        <article class="card">
-          <div class="emoji">🧮</div>
-          <h3>آلة حاسبة</h3>
-          <p>اكتب عملية حسابية بسيطة باستخدام الأرقام والعمليات الأساسية.</p>
-          <div class="tool-row">
-            <input id="calcInput" placeholder="مثال: 12 * 5" aria-label="العملية الحسابية">
-            <button class="btn" onclick="calculate()">احسب</button>
-          </div>
-          <p class="result" id="calcResult"></p>
-        </article>
-        <article class="card">
-          <div class="emoji">💡</div>
-          <h3>فكرة اليوم</h3>
-          <p id="ideaText">كل خطوة صغيرة بتقرّبك من هدفك.</p>
-          <button class="btn" onclick="newIdea()">فكرة أخرى</button>
-        </article>
-      </div>
-    </section>
+    <div class="grid">
+      <article class="card">
+        <div class="emoji">🧮</div>
+        <h3>آلة حاسبة</h3>
+        <p>اكتب عملية بالأرقام والرموز الأساسية.</p>
+        <input id="calcInput" placeholder="مثال: 12 * 5">
+        <button class="btn" onclick="calculate()">احسب</button>
+        <p class="result" id="calcResult"></p>
+      </article>
 
-    <section id="about" class="card" style="margin-top:24px">
-      <h2>👋 عن موقع إيهاب التفاعلي</h2>
-      <p>مشروع تفاعلي بسيط بدأناه خطوة بخطوة، وهدفنا نضيف إليه تجارب وأدوات جديدة مع الوقت.</p>
-      <p class="notice">نسخة تجريبية: النقاط تُحفظ على هذا الجهاز والمتصفح فقط. لا يوجد حاليًا حسابات مستخدمين أو ترتيب مشترك بين الزوار.</p>
-    </section>
-  </main>
+      <article class="card">
+        <div class="emoji">💡</div>
+        <h3>فكرة اليوم</h3>
+        <p id="ideaText">كل خطوة صغيرة بتقرّبك من هدفك.</p>
+        <button class="btn" onclick="newIdea()">فكرة أخرى</button>
+      </article>
+    </div>
+  </section>
 
-  <footer>
-    <p>© <span id="year"></span> موقع إيهاب التفاعلي — صُنع بشغف 💙</p>
-  </footer>
+  <section id="about" class="card" style="margin-top:25px">
+    <h2>🌟 عن موقع إيهاب التفاعلي</h2>
+    <p>مشروع تفاعلي هدفه تقديم ألعاب وتحديات وأدوات مجانية للجميع.</p>
+    <p class="notice">النقاط والأسماء وأفضل النتائج تُحفظ على الجهاز والمتصفح الحالي فقط، ولا يوجد حتى الآن نظام حسابات أو ترتيب مشترك بين الزوار.</p>
+  </section>
+</main>
 
-  <script>
-    const $ = id => document.getElementById(id);
-    let points = Number(localStorage.getItem('ehabPoints') || 0);
+<footer>
+  © <span id="year"></span> موقع إيهاب التفاعلي 💙
+  <p>كل يوم فكرة جديدة، وكل يوم خطوة للأمام 🚀</p>
+</footer>
 
-    function updatePoints() {
-      $('points').textContent = points;
-      localStorage.setItem('ehabPoints', String(points));
-    }
-    function addPoints(n) {
-      points += n;
-      updatePoints();
-    }
-    updatePoints();
-    $('year').textContent = new Date().getFullYear();
+<script>
+const $ = id => document.getElementById(id);
 
-    function hideActivities() {
-      document.querySelectorAll('.activity').forEach(el => el.classList.add('hidden'));
-    }
-    function showActivity(id) {
-      hideActivities();
-      $(id).classList.remove('hidden');
-      $(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
-      if (id === 'quiz') startQuiz();
-      if (id === 'math') newMath();
-      if (id === 'notes') {
-        try { $('noteText').value = localStorage.getItem('ehabNotes') || ''; }
-        catch (e) { $('noteResult').textContent = 'تعذر تحميل الملاحظات.'; }
-      }
-    }
+function readNumber(key) {
+  try {
+    return Math.max(0, Number(localStorage.getItem(key)) || 0);
+  } catch (e) {
+    return 0;
+  }
+}
 
-    const questions = [
-      { q: 'ما الكوكب المعروف بالكوكب الأحمر؟', a: ['الأرض', 'المريخ', 'زحل', 'عطارد'], correct: 1 },
-      { q: 'كم ضلعًا للمثلث؟', a: ['2', '3', '4', '5'], correct: 1 },
-      { q: 'ما اللغة التي يفهمها المتصفح لتنسيق صفحات الويب؟', a: ['CSS', 'SQL', 'Excel', 'Photoshop'], correct: 0 },
-      { q: 'ما أكبر محيط على الأرض؟', a: ['الأطلسي', 'الهندي', 'الهادئ', 'المتجمد الشمالي'], correct: 2 },
-      { q: 'كم يساوي 9 × 7؟', a: ['56', '63', '72', '49'], correct: 1 }
-    ];
-    let quizIndex = 0, quizScore = 0, answered = false;
+function readText(key) {
+  try {
+    return localStorage.getItem(key) || '';
+  } catch (e) {
+    return '';
+  }
+}
 
-    function startQuiz() {
-      quizIndex = 0;
-      quizScore = 0;
-      renderQuestion();
-    }
-    function renderQuestion() {
-      answered = false;
-      const item = questions[quizIndex];
-      $('question').textContent = `السؤال ${quizIndex + 1} من ${questions.length}: ${item.q}`;
-      $('quizResult').textContent = '';
-      $('nextQuestion').classList.add('hidden');
-      $('answers').innerHTML = '';
-      item.a.forEach((answer, i) => {
-        const btn = document.createElement('button');
-        btn.textContent = answer;
-        btn.onclick = () => answerQuiz(i);
-        $('answers').appendChild(btn);
-      });
-    }
-    function answerQuiz(index) {
-      if (answered) return;
-      answered = true;
-      const correct = questions[quizIndex].correct;
-      if (index === correct) {
-        quizScore++;
-        addPoints(5);
-        $('quizResult').textContent = 'إجابة صحيحة! +5 نقاط 🎉';
-      } else {
-        $('quizResult').textContent = 'مش صح المرة دي. الإجابة الصحيحة: ' + questions[quizIndex].a[correct];
-      }
-      [...$('answers').children].forEach(btn => btn.disabled = true);
-      $('nextQuestion').textContent = quizIndex === questions.length - 1 ? 'عرض النتيجة' : 'السؤال التالي ←';
-      $('nextQuestion').classList.remove('hidden');
-    }
-    function nextQuiz() {
-      if (quizIndex < questions.length - 1) {
-        quizIndex++;
-        renderQuestion();
-      } else {
-        $('question').textContent = `انتهى الاختبار! نتيجتك ${quizScore} من ${questions.length}.`;
-        $('answers').innerHTML = '';
-        $('quizResult').textContent = 'جرّب مرة أخرى لتحسّن نتيجتك.';
-        $('nextQuestion').classList.add('hidden');
-      }
-    }
+let points = readNumber('ehabPoints');
+let bestScore = readNumber('ehabBestScore');
 
-    let clickCount = 0, seconds = 10, running = false, timerId = null;
-    function startClicker() {
+function safeSave(key, value) {
+  try {
+    localStorage.setItem(key, String(value));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function updateDisplay() {
+  $('points').textContent = points;
+  $('playerPoints').textContent = points;
+  $('bestTop').textContent = bestScore;
+  $('bestScore').textContent = bestScore;
+  safeSave('ehabPoints', points);
+  safeSave('ehabBestScore', bestScore);
+}
+
+function addPoints(amount) {
+  points += amount;
+  updateDisplay();
+}
+
+function saveBestScore(score) {
+  if (score > bestScore) {
+    bestScore = score;
+    updateDisplay();
+  }
+}
+
+function savePlayer() {
+  const name = $('playerName').value.trim();
+
+  if (!name) {
+    $('welcomePlayer').textContent = 'اكتب اسمك الأول يا بطل!';
+    return;
+  }
+
+  if (safeSave('ehabPlayerName', name)) {
+    showPlayer();
+  } else {
+    $('welcomePlayer').textContent = 'تعذر الحفظ في المتصفح.';
+  }
+}
+
+function showPlayer() {
+  const name = readText('ehabPlayerName');
+  $('playerName').value = name;
+  $('welcomePlayer').textContent = name
+    ? 'أهلاً بيك يا ' + name + '! 🔥'
+    : 'أهلاً بيك يا بطل! اكتب اسمك فوق. 🚀';
+  updateDisplay();
+}
+
+function goTo(id) {
+  $(id).scrollIntoView({behavior:'smooth'});
+}
+
+function hideActivities() {
+  document.querySelectorAll('.activity').forEach(el => el.classList.add('hidden'));
+}
+
+function showActivity(id) {
+  hideActivities();
+  $(id).classList.remove('hidden');
+  $(id).scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+$('year').textContent = new Date().getFullYear();
+showPlayer();
+
+const questions = [
+  {q:'ما الكوكب المعروف بالكوكب الأحمر؟',a:['الأرض','المريخ','زحل','عطارد'],c:1},
+  {q:'كم ضلعًا للمثلث؟',a:['2','3','4','5'],c:1},
+  {q:'ما اللغة المسؤولة عن تنسيق شكل صفحات الويب؟',a:['CSS','SQL','Excel','Python'],c:0},
+  {q:'ما أكبر محيط على الأرض؟',a:['الأطلسي','الهندي','الهادئ','المتجمد الشمالي'],c:2},
+  {q:'كم يساوي 9 × 7؟',a:['56','63','72','49'],c:1},
+  {q:'ما الغاز الذي تحتاجه النباتات في عملية البناء الضوئي؟',a:['الأكسجين','النيتروجين','ثاني أكسيد الكربون','الهيدروجين'],c:2},
+  {q:'كم دقيقة في الساعة؟',a:['30','45','60','100'],c:2}
+];
+
+let quizIndex = 0;
+let quizScore = 0;
+let quizAnswered = false;
+let quizEarned = false;
+
+function startQuiz() {
+  quizIndex = 0;
+  quizScore = 0;
+  quizEarned = false;
+  renderQuestion();
+}
+
+function renderQuestion() {
+  quizAnswered = false;
+  const item = questions[quizIndex];
+
+  $('question').textContent =
+    `السؤال ${quizIndex+1} من ${questions.length}: ${item.q}`;
+  $('quizResult').textContent = '';
+  $('nextQuestion').classList.add('hidden');
+  $('answers').innerHTML = '';
+
+  item.a.forEach((answer,index) => {
+    const btn = document.createElement('button');
+    btn.textContent = answer;
+    btn.onclick = () => answerQuiz(index);
+    $('answers').appendChild(btn);
+  });
+}
+
+function answerQuiz(index) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+
+  const item = questions[quizIndex];
+  const buttons = [...$('answers').children];
+
+  buttons.forEach(btn => btn.disabled = true);
+
+  if (index === item.c) {
+    quizScore++;
+    addPoints(5);
+    $('quizResult').textContent = 'إجابة صحيحة! +5 نقاط 🎉';
+  } else {
+    $('quizResult').textContent =
+      'الإجابة الصحيحة: ' + item.a[item.c];
+  }
+
+  $('nextQuestion').textContent =
+    quizIndex === questions.length-1 ? 'عرض النتيجة' : 'السؤال التالي ←';
+  $('nextQuestion').classList.remove('hidden');
+}
+
+function nextQuiz() {
+  if (quizIndex < questions.length-1) {
+    quizIndex++;
+    renderQuestion();
+    return;
+  }
+
+  if (!quizEarned) {
+    saveBestScore(quizScore);
+    quizEarned = true;
+  }
+
+  $('question').textContent =
+    `انتهى الاختبار! نتيجتك ${quizScore} من ${questions.length}.`;
+  $('answers').innerHTML = '';
+  $('quizResult').textContent =
+    quizScore === questions.length
+      ? 'ممتاز! جاوبت على كل الأسئلة صح 🏆'
+      : 'برافو على المحاولة! جرّب مرة أخرى لتحسّن نتيجتك.';
+  $('nextQuestion').classList.add('hidden');
+}
+
+let clickCount = 0;
+let seconds = 10;
+let running = false;
+let timerId = null;
+
+function startClicker() {
+  clearInterval(timerId);
+  clickCount = 0;
+  seconds = 10;
+  running = true;
+
+  $('clickCount').textContent = clickCount;
+  $('timer').textContent = seconds;
+  $('clickResult').textContent = 'استعد... انطلق! 🔥';
+  $('clickButton').disabled = false;
+  $('startClick').disabled = true;
+
+  timerId = setInterval(() => {
+    seconds--;
+    $('timer').textContent = seconds;
+
+    if (seconds <= 0) {
       clearInterval(timerId);
-      clickCount = 0;
-      seconds = 10;
-      running = true;
-      $('clickCount').textContent = clickCount;
-      $('timer').textContent = seconds;
-      $('clickResult').textContent = 'يلا ابدأ! 🔥';
-      $('clickButton').disabled = false;
-      $('startClick').disabled = true;
-      timerId = setInterval(() => {
-        seconds--;
-        $('timer').textContent = seconds;
-        if (seconds <= 0) {
-          clearInterval(timerId);
-          running = false;
-          $('clickButton').disabled = true;
-          $('startClick').disabled = false;
-          $('clickResult').textContent = `انتهى الوقت! عملت ${clickCount} ضغطة.`;
-          const earned = Math.floor(clickCount / 5);
-          if (earned > 0) {
-            addPoints(earned);
-            $('clickResult').textContent += ` كسبت ${earned} نقاط!`;
-          }
-        }
-      }, 1000);
+      running = false;
+      $('clickButton').disabled = true;
+      $('startClick').disabled = false;
+
+      const earned = Math.floor(clickCount/5);
+      addPoints(earned);
+      saveBestScore(clickCount);
+
+      $('clickResult').textContent =
+        `انتهى الوقت! نتيجتك ${clickCount} ضغطة، وكسبت ${earned} نقاط.`;
     }
-    function clickPoint() {
-      if (!running) return;
-      clickCount++;
-      $('clickCount').textContent = clickCount;
+  },1000);
+}
+
+function clickPoint() {
+  if (!running) return;
+  clickCount++;
+  $('clickCount').textContent = clickCount;
+}
+
+let mathExpected = 0;
+let mathAnswered = false;
+
+function newMath() {
+  const a = Math.floor(Math.random()*12)+1;
+  const b = Math.floor(Math.random()*12)+1;
+  const op = Math.random()<0.5 ? '+' : '×';
+
+  mathExpected = op === '+' ? a+b : a*b;
+  mathAnswered = false;
+  $('mathQuestion').textContent = `كم يساوي ${a} ${op} ${b}؟`;
+  $('mathAnswer').value = '';
+  $('mathResult').textContent = '';
+}
+
+function checkMath() {
+  if (mathAnswered) {
+    $('mathResult').textContent = 'اضغط «مسألة جديدة» للمتابعة.';
+    return;
+  }
+
+  const value = $('mathAnswer').value.trim();
+
+  if (value === '') {
+    $('mathResult').textContent = 'اكتب إجابتك الأول.';
+    return;
+  }
+
+  if (Number(value) === mathExpected) {
+    mathAnswered = true;
+    addPoints(3);
+    saveBestScore(3);
+    $('mathResult').textContent = 'برافو! إجابة صحيحة +3 نقاط 🎉';
+  } else {
+    $('mathResult').textContent = 'مش الإجابة الصحيحة، جرّب تاني!';
+  }
+}
+
+function loadNotes() {
+  $('noteText').value = readText('ehabNotes');
+  $('noteResult').textContent = '';
+}
+
+function saveNote() {
+  const ok = safeSave('ehabNotes',$('noteText').value);
+  $('noteResult').textContent = ok
+    ? 'تم حفظ ملاحظاتك على الجهاز ✅'
+    : 'تعذر الحفظ في المتصفح.';
+}
+
+function clearNote() {
+  $('noteText').value = '';
+  try {
+    localStorage.removeItem('ehabNotes');
+  } catch (e) {}
+  $('noteResult').textContent = 'تم مسح الملاحظات.';
+}
+
+function calculate() {
+  const expr = $('calcInput').value.trim();
+
+  if (!expr || !/^[0-9+\-*/().\s]+$/.test(expr) ||
+      !/[0-9]/.test(expr)) {
+    $('calcResult').textContent = 'اكتب عملية حسابية صحيحة.';
+    return;
+  }
+
+  const tokens = expr.match(/\d+(?:\.\d+)?|[()+*/-]/g);
+
+  if (!tokens || tokens.join('') !== expr.replace(/\s/g,'')) {
+    $('calcResult').textContent = 'راجع العملية الحسابية.';
+    return;
+  }
+
+  let pos = 0;
+
+  function expression() {
+    let value = term();
+
+    while (tokens[pos] === '+' || tokens[pos] === '-') {
+      const op = tokens[pos++];
+      const next = term();
+      value = op === '+' ? value+next : value-next;
     }
 
-    let mathExpected = 0;
-    function newMath() {
-      const a = Math.floor(Math.random() * 12) + 1;
-      const b = Math.floor(Math.random() * 12) + 1;
-      const op = Math.random() < 0.5 ? '+' : '×';
-      mathExpected = op === '+' ? a + b : a * b;
-      $('mathQuestion').textContent = `كم يساوي ${a} ${op} ${b}؟`;
-      $('mathAnswer').value = '';
-      $('mathResult').textContent = '';
-    }
-    function checkMath() {
-      const value = $('mathAnswer').value.trim();
-      if (value === '') {
-        $('mathResult').textContent = 'اكتب إجابتك الأول.';
-        return;
-      }
-      if (Number(value) === mathExpected) {
-        $('mathResult').textContent = 'برافو! إجابة صحيحة، +3 نقاط 🎉';
-        addPoints(3);
-        newMath();
-      } else {
-        $('mathResult').textContent = 'جرّب مرة تانية، تقدر تعملها!';
-      }
+    return value;
+  }
+
+  function term() {
+    let value = factor();
+
+    while (tokens[pos] === '*' || tokens[pos] === '/') {
+      const op = tokens[pos++];
+      const next = factor();
+
+      if (op === '/' && next === 0) throw Error('zero');
+      value = op === '*' ? value*next : value/next;
     }
 
-    function saveNote() {
-      try {
-        localStorage.setItem('ehabNotes', $('noteText').value);
-        $('noteResult').textContent = 'تم حفظ الملاحظات على جهازك ✅';
-      } catch (e) {
-        $('noteResult').textContent = 'المتصفح لم يسمح بالحفظ.';
-      }
-    }
-    function clearNote() {
-      $('noteText').value = '';
-      try { localStorage.removeItem('ehabNotes'); } catch (e) {}
-      $('noteResult').textContent = 'تم مسح الملاحظات.';
+    return value;
+  }
+
+  function factor() {
+    if (tokens[pos] === '+') {
+      pos++;
+      return factor();
     }
 
-    function calculate() {
-      const expr = $('calcInput').value.trim();
-      if (!/^[0-9+\-*/().\s]+$/.test(expr) || !/[0-9]/.test(expr)) {
-        $('calcResult').textContent = 'اكتب عملية صحيحة بالأرقام والرموز + - * / والأقواس.';
-        return;
-      }
-      try {
-        const result = Function('"use strict"; return (' + expr + ')')();
-        $('calcResult').textContent = Number.isFinite(result) ? 'النتيجة: ' + result : 'العملية غير صالحة.';
-      } catch (e) {
-        $('calcResult').textContent = 'راجع العملية الحسابية.';
-      }
+    if (tokens[pos] === '-') {
+      pos++;
+      return -factor();
     }
 
-    const ideas = [
-      'كل خطوة صغيرة بتقرّبك من هدفك.',
-      'جرّب تتعلم حاجة جديدة كل يوم.',
-      'قسّم المهمة الكبيرة إلى خطوات صغيرة.',
-      'الخطأ فرصة تفهم وتتعلم أكتر.',
-      'ابدأ بالمتاح عندك، وطوّر مشروعك بالتدريج.'
-    ];
-    let ideaIndex = 0;
-    function newIdea() {
-      ideaIndex = (ideaIndex + 1) % ideas.length;
-      $('ideaText').textContent = ideas[ideaIndex];
+    if (tokens[pos] === '(') {
+      pos++;
+      const value = expression();
+      if (tokens[pos++] !== ')') throw Error('parenthesis');
+      return value;
     }
-  </script>
+
+    const token = tokens[pos++];
+
+    if (token === undefined || !/^\d+(?:\.\d+)?$/.test(token)) {
+      throw Error('number');
+    }
+
+    return Number(token);
+  }
+
+  try {
+    const result = expression();
+
+    if (pos !== tokens.length || !Number.isFinite(result)) {
+      throw Error('invalid');
+    }
+
+    $('calcResult').textContent = 'النتيجة: ' + result;
+  } catch (e) {
+    $('calcResult').textContent = 'العملية غير صحيحة أو القسمة على صفر.';
+  }
+}
+
+const ideas = [
+  'كل خطوة صغيرة بتقرّبك من هدفك.',
+  'جرّب تتعلم حاجة جديدة كل يوم.',
+  'قسّم المهمة الكبيرة لخطوات بسيطة.',
+  'الأخطاء فرصة للتعلم والتطوير.',
+  'ابدأ بالمتاح عندك وطوّر مشروعك بالتدريج.',
+  'خصص وقتًا كل يوم لفكرة جديدة.'
+];
+
+let ideaIndex = 0;
+
+function newIdea() {
+  ideaIndex = (ideaIndex+1)%ideas.length;
+  $('ideaText').textContent = ideas[ideaIndex];
+}
+</script>
 </body>
 </html>
