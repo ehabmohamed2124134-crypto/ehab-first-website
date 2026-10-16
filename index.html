@@ -3,191 +3,282 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ehab Interactive</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Ehab Driver 3D</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#080d1b;color:#fff;font-family:Arial,sans-serif}
-header{padding:30px 15px;text-align:center;background:linear-gradient(135deg,#122d65,#7028a8)}
-header h1{font-size:32px;margin:0}
-header p{color:#e2ddff}
-nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:12px;background:#10182c;position:sticky;top:0}
-button{border:0;padding:12px 16px;border-radius:12px;background:#293858;color:white;font-weight:bold;cursor:pointer}
-button:active{transform:scale(.97)}
-button:hover,.primary{background:#754bff}
-main{max-width:950px;margin:auto;padding:16px}
-section{display:none}
-section.active{display:block}
-.hero,.card,.game{border:1px solid #2d3d61;border-radius:18px;background:#131d32;padding:20px;margin-bottom:15px}
-.hero{background:linear-gradient(130deg,#182e5a,#35205c)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-.card{text-align:center}
-.emoji{font-size:42px}
-.card p,.muted{color:#bdc8df;line-height:1.7}
-h2{margin-top:0}
-input{width:100%;padding:13px;margin:8px 0;border-radius:10px;border:1px solid #46587c;background:#080f20;color:white;font-size:17px}
-#result{font-size:19px;line-height:1.8;margin-top:15px}
-.score{font-size:55px;color:#b3a0ff;font-weight:bold}
-footer{text-align:center;color:#9eabc8;padding:25px}
+body{margin:0;overflow:hidden;background:#83c9f5;color:white;font-family:Arial,sans-serif}
+canvas{display:block}
+#hud{position:fixed;inset:0;pointer-events:none}
+.top{display:flex;justify-content:space-between;gap:8px;padding:12px}
+.box{background:#101827d9;padding:10px 14px;border:1px solid #ffffff35;border-radius:14px;font-weight:bold}
+#mission{position:absolute;top:76px;left:50%;transform:translateX(-50%);background:#101827d9;padding:10px 16px;border-radius:12px;white-space:nowrap;font-size:13px}
+#controls{position:absolute;bottom:20px;left:0;right:0;display:flex;justify-content:space-between;align-items:end;padding:0 18px;pointer-events:auto}
+.group{display:flex;gap:10px}
+.ctrl{width:64px;height:64px;border-radius:20px;background:#101827cf;border:2px solid #ffffff70;color:white;font-size:25px;touch-action:none}
+.ctrl:active{background:#7654ff}
+#pedals{display:flex;flex-direction:column;gap:8px}
+#menu{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(#0713268a,#071326e8);padding:20px}
+.panel{width:min(400px,100%);background:#111b30;border:1px solid #52658c;border-radius:24px;padding:25px;text-align:center;box-shadow:0 20px 60px #0006}
+.panel h1{font-size:32px;margin:0 0 8px}
+.panel p{color:#c6d3e8;line-height:1.8}
+.action{width:100%;padding:15px;border:0;border-radius:13px;background:#7551ff;color:white;font-weight:bold;font-size:18px;margin-top:10px}
+#toast{position:fixed;top:42%;left:50%;transform:translate(-50%,-50%);background:#101827ed;padding:20px;border-radius:18px;display:none;text-align:center;max-width:85%}
+@media(max-height:450px){.ctrl{width:54px;height:54px}.top{padding:6px}#controls{bottom:8px}.box{padding:7px}}
 </style>
 </head>
 <body>
-<header>
-<h1>🚀 Ehab Interactive</h1>
-<p>عالمك التفاعلي — العب واختبر ذكاءك!</p>
-</header>
-
-<nav>
-<button onclick="showPage('home')">🏠 الرئيسية</button>
-<button onclick="showPage('games')">🎮 الألعاب</button>
-<button onclick="showPage('points')">🏆 نقاطي</button>
-<button onclick="showPage('about')">ℹ️ عن الموقع</button>
-</nav>
-
-<main>
-<section id="home" class="active">
-<div class="hero">
-<h2>أهلاً بيك يا بطل! 👋</h2>
-<p>أهلاً بك في Ehab Interactive، اختار لعبتك وابدأ التحدي.</p>
-<button class="primary" onclick="showPage('games')">ابدأ اللعب 🚀</button>
+<div id="hud">
+ <div class="top">
+  <div class="box">🚗 EHAB DRIVER</div>
+  <div class="box">🏆 <span id="score">0</span></div>
+  <div class="box">⚡ <span id="speed">0</span> كم/س</div>
+ </div>
+ <div id="mission">📍 المهمة: استكشف المدينة</div>
+ <div id="controls">
+  <div class="group">
+   <button class="ctrl" id="left">◀</button>
+   <button class="ctrl" id="right">▶</button>
+  </div>
+  <div id="pedals">
+   <button class="ctrl" id="gas">⬆️</button>
+   <button class="ctrl" id="brake">⬇️</button>
+  </div>
+ </div>
 </div>
-<div class="grid">
-<div class="card"><div class="emoji">🎯</div><h3>خمن الرقم</h3><p>هل تقدر تعرف الرقم السري؟</p><button onclick="startGuess()">العب الآن</button></div>
-<div class="card"><div class="emoji">🧠</div><h3>تحدي الحساب</h3><p>اختبر مهاراتك في الرياضيات.</p><button onclick="startMath()">العب الآن</button></div>
-<div class="card"><div class="emoji">🏆</div><h3>النقاط</h3><p>تابع تقدمك وإنجازاتك.</p><button onclick="showPage('points')">عرض النقاط</button></div>
+
+<div id="menu">
+ <div class="panel">
+  <h1>🏙️ EHAB DRIVER</h1>
+  <p>أهلاً بيك في مدينتك!<br>سوق عربيتك، استكشف الشوارع، واجمع النقاط.</p>
+  <p>🕹️ استخدم الأسهم للتوجيه وأزرار البنزين والفرامل للحركة.</p>
+  <button class="action" id="start">🚘 ابدأ القيادة</button>
+  <p style="font-size:12px">نسخة تجريبية ثلاثية الأبعاد</p>
+ </div>
 </div>
-</section>
+<div id="toast"></div>
 
-<section id="games">
-<h2>🎮 اختار لعبتك</h2>
-<div class="grid">
-<div class="card"><div class="emoji">🎯</div><h3>خمن الرقم</h3><p>خمن رقم من 1 إلى 10.</p><button class="primary" onclick="startGuess()">ابدأ</button></div>
-<div class="card"><div class="emoji">🧮</div><h3>تحدي الحساب</h3><p>حل مسائل حسابية واكسب نقاط.</p><button class="primary" onclick="startMath()">ابدأ</button></div>
-<div class="card"><div class="emoji">🎲</div><h3>رقم الحظ</h3><p>اكتشف رقمك العشوائي.</p><button class="primary" onclick="luck()">جرّب</button></div>
-</div>
-<div class="game">
-<h3 id="gameTitle">اختار لعبة من فوق 👆</h3>
-<div id="gameArea"></div>
-<div id="result"></div>
-</div>
-</section>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
 
-<section id="points">
-<div class="hero">
-<h2>🏆 رصيد نقاطك</h2>
-<div class="score" id="score">0</div>
-<p>كل إجابة صحيحة تضيف 10 نقاط.</p>
-<button onclick="resetPoints()">إعادة النقاط للصفر</button>
-</div>
-</section>
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x83c9f5);
+scene.fog=new THREE.Fog(0x83c9f5,65,210);
 
-<section id="about">
-<div class="hero">
-<h2>ℹ️ عن Ehab Interactive</h2>
-<p>مشروع تفاعلي من تصميم إيهاب، هدفه تقديم ألعاب وتحديات ممتعة للجميع.</p>
-<p>الإصدار الأول — ولسه فيه تطويرات جاية! 🚀</p>
-</div>
-</section>
-</main>
+const camera=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,.1,350);
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+document.body.prepend(renderer.domElement);
 
-<footer>صُنع بكل حب ❤️ بواسطة إيهاب</footer>
+scene.add(new THREE.HemisphereLight(0xe2f4ff,0x526044,2));
+const sun=new THREE.DirectionalLight(0xfff0d0,2.5);
+sun.position.set(-25,45,25);
+sun.castShadow=true;
+sun.shadow.mapSize.set(1024,1024);
+scene.add(sun);
 
-<script>
-let points=0;
-try{points=Number(localStorage.getItem('ehabInteractivePoints'))||0}catch(e){}
+function mat(color,roughness=1){
+ return new THREE.MeshStandardMaterial({color,roughness});
+}
+const grass=mat(0x57984c);
+const roadMat=mat(0x343b47);
+const lineMat=mat(0xf6e8a3);
+const buildingMats=[0xd7c8b4,0xadbfd1,0xe3d8c6,0xb6c6b7,0xe0bca8,0xc3c5db].map(c=>mat(c));
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(500,500),grass);
+ground.rotation.x=-Math.PI/2;
+ground.position.y=-.13;
+ground.receiveShadow=true;
+scene.add(ground);
 
-function savePoints(){
-try{localStorage.setItem('ehabInteractivePoints',String(points))}catch(e){}
-document.getElementById('score').textContent=points;
+const city=new THREE.Group();
+scene.add(city);
+
+// شبكة شوارع ومبانٍ للمدينة
+for(let i=-5;i<=5;i++){
+ const z=i*18;
+ const x=i*18;
+ const road1=new THREE.Mesh(new THREE.PlaneGeometry(8,220),roadMat);
+ road1.rotation.x=-Math.PI/2;
+ road1.position.set(x,.005,0);
+ city.add(road1);
+ const road2=new THREE.Mesh(new THREE.PlaneGeometry(220,8),roadMat);
+ road2.rotation.x=-Math.PI/2;
+ road2.position.set(0,.008,z);
+ city.add(road2);
+
+ for(let k=-5;k<=5;k++){
+  const dash1=new THREE.Mesh(new THREE.BoxGeometry(.12,.025,2),lineMat);
+  dash1.position.set(x,.04,k*7+3.5);
+  city.add(dash1);
+  const dash2=new THREE.Mesh(new THREE.BoxGeometry(2,.025,.12),lineMat);
+  dash2.position.set(k*7+3.5,.04,z);
+  city.add(dash2);
+ }
 }
 
-function showPage(id){
-document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-window.scrollTo({top:0,behavior:'smooth'});
-savePoints();
+for(let x=-90;x<=90;x+=18){
+ for(let z=-90;z<=90;z+=18){
+  if(Math.abs(x)%36===0&&Math.abs(z)%36===0)continue;
+  const w=6+Math.random()*3;
+  const d=6+Math.random()*3;
+  const h=5+Math.random()*23;
+  const b=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),buildingMats[Math.floor(Math.random()*buildingMats.length)]);
+  b.position.set(x+(Math.random()-.5)*2,h/2,z+(Math.random()-.5)*2);
+  b.castShadow=true;b.receiveShadow=true;
+  city.add(b);
+
+  const roof=new THREE.Mesh(new THREE.BoxGeometry(w+.15,.3,d+.15),mat(0x596273));
+  roof.position.set(b.position.x,h+.1,b.position.z);
+  city.add(roof);
+
+  for(let wy=2;wy<h-1;wy+=3){
+   for(let wx=-w/2+1;wx<w/2;wx+=2){
+    const win=new THREE.Mesh(new THREE.BoxGeometry(.8,1,.08),mat(Math.random()>.2?0x8ccee9:0x33455c));
+    win.position.set(b.position.x+wx,wy,b.position.z+d/2+.045);
+    city.add(win);
+   }
+  }
+ }
 }
 
-function setupGame(title,html){
-showPage('games');
-document.getElementById('gameTitle').textContent=title;
-document.getElementById('gameArea').innerHTML=html;
-document.getElementById('result').textContent='';
+// العربية
+const car=new THREE.Group();
+scene.add(car);
+const red=mat(0xd92736,.35),glass=new THREE.MeshStandardMaterial({color:0x8ed7ee,metalness:.2,roughness:.2});
+const black=mat(0x171b24,.65);
+function block(parent,w,h,d,material,x,y,z){
+ const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);
+ m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;
+ parent.add(m);return m;
+}
+block(car,2,0.65,4,red,0,.85,0);
+block(car,1.5,.7,1.9,red,0,1.45,-.2);
+block(car,1.36,.52,1.72,glass,0,1.48,-.17);
+for(const x of [-1,1]){
+ for(const z of [-1.35,1.35]){
+  const wheel=new THREE.Mesh(new THREE.CylinderGeometry(.39,.39,.25,16),black);
+  wheel.rotation.z=Math.PI/2;
+  wheel.position.set(x,.43,z);
+  car.add(wheel);
+ }
+}
+for(const x of [-.65,.65]){
+ block(car,.3,.15,.12,mat(0xfff1bc),x,.9,2.03);
+ block(car,.3,.15,.12,mat(0xff3131),x,.9,-2.03);
+}
+car.position.set(0,0,0);
+
+const target=new THREE.Vector3();
+const camOffset=new THREE.Vector3(0,5.5,10);
+let started=false,speed=0,steer=0,score=0,missionCount=0;
+const held={gas:false,brake:false,left:false,right:false};
+const checkpoints=[];
+
+for(let i=0;i<8;i++){
+ const g=new THREE.Group();
+ const ring=new THREE.Mesh(new THREE.TorusGeometry(2,.22,10,28),mat(0xffd54a));
+ ring.position.y=2.1;
+ g.add(ring);
+ const beam=new THREE.Mesh(new THREE.CylinderGeometry(.09,.09,2.3,8),mat(0xffd54a));
+ beam.position.y=1;
+ g.add(beam);
+ g.position.set((Math.floor(Math.random()*7)-3)*18,0,-25-i*22);
+ scene.add(g);
+ checkpoints.push(g);
 }
 
-let secret=0,tries=0,mathAnswer=0;
+function bind(id,key){
+ const el=document.getElementById(id);
+ const down=e=>{e.preventDefault();held[key]=true};
+ const up=e=>{e.preventDefault();held[key]=false};
+ el.addEventListener('pointerdown',down);
+ el.addEventListener('pointerup',up);
+ el.addEventListener('pointercancel',up);
+ el.addEventListener('pointerleave',up);
+}
+bind('gas','gas');bind('brake','brake');
+bind('left','left');bind('right','right');
 
-function startGuess(){
-secret=Math.floor(Math.random()*10)+1;
-tries=0;
-setupGame('🎯 خمن الرقم السري',
-'<p>أنا اخترت رقم من 1 إلى 10. خمنه!</p>'+
-'<input id="guessInput" type="number" min="1" max="10" placeholder="اكتب رقمك هنا">'+
-'<button class="primary" onclick="checkGuess()">تحقق من الإجابة</button>'+
-'<button onclick="startGuess()">لعبة جديدة</button>');
-}
+addEventListener('keydown',e=>{
+ if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();
+ if(e.key==='ArrowUp'||e.key==='w')held.gas=true;
+ if(e.key==='ArrowDown'||e.key==='s')held.brake=true;
+ if(e.key==='ArrowLeft'||e.key==='a')held.left=true;
+ if(e.key==='ArrowRight'||e.key==='d')held.right=true;
+});
+addEventListener('keyup',e=>{
+ if(e.key==='ArrowUp'||e.key==='w')held.gas=false;
+ if(e.key==='ArrowDown'||e.key==='s')held.brake=false;
+ if(e.key==='ArrowLeft'||e.key==='a')held.left=false;
+ if(e.key==='ArrowRight'||e.key==='d')held.right=false;
+});
 
-function checkGuess(){
-let input=document.getElementById('guessInput');
-let n=Number(input.value);
-let r=document.getElementById('result');
-if(input.value===''||!Number.isInteger(n)||n<1||n>10){
-r.textContent='اكتب رقمًا صحيحًا من 1 إلى 10.';
-return;
-}
-tries++;
-if(n===secret){
-points+=10;
-savePoints();
-r.textContent='🎉 برافو! إجابة صحيحة، كسبت 10 نقاط! عدد المحاولات: '+tries;
-}else{
-r.textContent=n<secret?'⬆️ الرقم السري أكبر! حاول تاني.':'⬇️ الرقم السري أصغر! حاول تاني.';
-}
-}
+document.getElementById('start').onclick=()=>{
+ started=true;
+ document.getElementById('menu').style.display='none';
+ showToast('🚗 يلا بينا! وصل لحلقات المهمة الذهبية.');
+};
 
-function startMath(){
-let a=Math.floor(Math.random()*20)+1;
-let b=Math.floor(Math.random()*20)+1;
-let op=Math.random()<.5?'+':'-';
-mathAnswer=op==='+'?a+b:a-b;
-setupGame('🧠 تحدي الحساب',
-'<p>حل المسألة دي:</p><h2>'+a+' '+op+' '+b+' = ؟</h2>'+
-'<input id="mathInput" type="number" placeholder="اكتب الإجابة">'+
-'<button class="primary" onclick="checkMath()">تحقق من الإجابة</button>'+
-'<button onclick="startMath()">مسألة جديدة</button>');
+function showToast(t){
+ const el=document.getElementById('toast');
+ el.textContent=t;el.style.display='block';
+ clearTimeout(showToast.timer);
+ showToast.timer=setTimeout(()=>el.style.display='none',1800);
 }
 
-function checkMath(){
-let input=document.getElementById('mathInput');
-let r=document.getElementById('result');
-if(input.value===''){r.textContent='اكتب إجابتك الأول.';return;}
-if(Number(input.value)===mathAnswer){
-points+=10;
-savePoints();
-r.textContent='🎉 إجابة صحيحة! كسبت 10 نقاط.';
-}else{
-r.textContent='❌ مش دي الإجابة الصح. جرّب مسألة جديدة!';
-}
-}
+let last=performance.now();
+function animate(now){
+ requestAnimationFrame(animate);
+ const dt=Math.min((now-last)/1000,.04);last=now;
 
-function luck(){
-setupGame('🎲 رقم الحظ','<button class="primary" onclick="rollLuck()">اكشف رقمك</button>');
-}
+ if(started){
+  if(held.gas)speed=Math.min(speed+13*dt,42);
+  else speed=Math.max(0,speed-4*dt);
+  if(held.brake)speed=Math.max(0,speed-25*dt);
 
-function rollLuck(){
-let n=Math.floor(Math.random()*100)+1;
-document.getElementById('gameArea').innerHTML='<h2 style="font-size:45px;color:#b3a0ff">'+n+'</h2><button class="primary" onclick="rollLuck()">جرّب مرة تانية</button>';
-document.getElementById('result').textContent='رقم عشوائي للمتعة فقط 😄';
-}
+  steer=(held.left?1:0)-(held.right?1:0);
+  if(speed>.3){
+   car.rotation.y+=steer*dt*(.8+speed*.025);
+   const forward=new THREE.Vector3(0,0,-1).applyQuaternion(car.quaternion);
+   car.position.addScaledVector(forward,speed*dt*.28);
+  }
 
-function resetPoints(){
-if(confirm('متأكد إنك عايز تصفر نقاطك؟')){
-points=0;
-savePoints();
-}
-}
+  car.position.x=THREE.MathUtils.clamp(car.position.x,-105,105);
+  car.position.z=THREE.MathUtils.clamp(car.position.z,-105,105);
 
-savePoints();
+  for(const g of checkpoints){
+   g.rotation.y+=dt*.8;
+   if(g.visible&&car.position.distanceTo(g.position)<3.5){
+    g.visible=false;score+=100;missionCount++;
+    document.getElementById('score').textContent=score;
+    document.getElementById('mission').textContent='🏁 أنجزت '+missionCount+' من 8 نقاط';
+    showToast('🏆 ممتاز! +100 نقطة');
+    if(missionCount===8){
+     showToast('🎉 خلصت كل نقاط المهمة! استكشف المدينة.');
+     document.getElementById('mission').textContent='🎉 المهمة اكتملت!';
+    }
+   }
+  }
+ }
+ document.getElementById('speed').textContent=Math.round(speed*3.2);
+
+ const desired=car.position.clone().add(camOffset.clone().applyQuaternion(car.quaternion));
+ camera.position.lerp(desired,.09);
+ target.copy(car.position).add(new THREE.Vector3(0,1,0));
+ camera.lookAt(target);
+
+ renderer.render(scene,camera);
+}
+requestAnimationFrame(animate);
+
+addEventListener('resize',()=>{
+ camera.aspect=innerWidth/innerHeight;
+ camera.updateProjectionMatrix();
+ renderer.setSize(innerWidth,innerHeight);
+});
 </script>
 </body>
 </html>
